@@ -82,10 +82,10 @@ module budget 'modules/budget.bicep' = {
 module cosmosDb 'modules/cosmos-db.bicep' = {
   name: 'cosmos-db'
   params: {
-    appConfigName: appConfig.name
+    appConfigName: appConfig.outputs.appConfigName
     cosmosDBAccountName: cosmosDbAccountName
     databaseName: cosmosDbDatabaseName
-    keyVaultName: keyVault.name
+    keyVaultName: keyVault.outputs.keyVaultName
     location: location
     tags: tags
   }
