@@ -14,7 +14,7 @@
         "keyVaultName": {
             "value": "kv-healthtrackr-prod"
         },
-        "cosmosDBAccountName": {
+        "cosmosDbAccountName": {
             "value": "cosmosdb-healthtrackr-prod"
         },
         "cosmosDbDatabaseName": {
