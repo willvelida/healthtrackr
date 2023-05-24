@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appServicePlanName": {
+            "value": "asp-healthtrackr-prod"
+        },
+        "appInsightsName": {
+            "value": "ai-healthtrackr-prod"
+        },
+        "budgetName":{
+            "value": "budget-healthtrackr-prod"
+        },
+        "keyVaultName": {
+            "value": "kv-healthtrackr-prod"
+        },
+        "cosmosDBAccountName": {
+            "value": "cosmosdb-healthtrackr-prod"
+        },
+        "cosmosDbDatabaseName": {
+            "value": "HealthTrackrDB"
+        },
+        "appConfigName":{
+            "value": "appconfig-healthtrackr-prod"
+        },
+        "serviceBusNamespaceName": {
+            "value": "sb-healthtrackr-prod"
+        },
+        "logAnalyticsWorkspaceName": {
+            "value": "law-healthtrackr-prod"
+        }
+    }
+}
