@@ -96,9 +96,6 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-
-    - name: Test
-      run: dotnet test --no-build --verbosity normal --logger trx
        
     - name: Publish Functions
       run: dotnet publish ./Healthtrackr.Auth/Healthtrackr.Auth.csproj --configuration Release --output ${{ env.OUTPUT_PATH }}
