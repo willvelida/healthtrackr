@@ -1,0 +1,132 @@
+name: HealthCheckr.Auth
+env:
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
+  DOTNET_VERSION: 6.0.x
+  OUTPUT_PATH: ${{ github.workspace }}/.output
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - Healthtrackr.Auth/**
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Bicep Linter
+        run: az bicep build --file ./Healthtrackr.Auth/deploy/main.bicep
+
+  validate:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: azure/login@v1
+        name: Sign in to Azure
+        with:
+            client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      
+      - uses: azure/arm-deploy@v1
+        name: Run preflight validation
+        with:
+          deploymentName: ${{ github.run_number }}
+          resourceGroupName: ${{ secrets.AZURE_RG }}
+          template: ./Healthtrackr.Auth/deploy/main.bicep
+          parameters: ./Healthtrackr.Auth/deploy/parameters.prod.json
+          deploymentMode: Validate
+
+  preview:
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - uses: actions/checkout@v2
+      - uses: azure/login@v1
+        name: Sign in to Azure
+        with:
+            client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - uses: Azure/cli@v1
+        name: Run what-if
+        with:
+          inlineScript: |
+            az deployment group what-if --resource-group ${{ secrets.AZURE_RG }} --template-file ./HealthHealthtrackrCheckr.Auth/deploy/main.bicep --parameters ./Healthtrackr.Auth/deploy/parameters.prod.json
+  deploy-infra:
+    runs-on: ubuntu-latest
+    environment: Production
+    needs: preview
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: azure/login@v1
+        with:
+            client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        
+      - name: Deploy Bicep File
+        uses: azure/arm-deploy@v1
+        with:
+          resourceGroupName: ${{ secrets.AZURE_RG }}
+          template: ./Healthtrackr.Auth/deploy/main.bicep
+          parameters: ./Healthtrackr.Auth/deploy/parameters.prod.json
+          failOnStdErr: false
+
+  build-function:
+    needs: deploy-infra
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: './Healthtrackr.Auth/src/Healthtrackr.Auth/'
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@v2
+      
+    - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Test
+      run: dotnet test --no-build --verbosity normal --logger trx
+       
+    - name: Publish Functions
+      run: dotnet publish ./Healthtrackr.Auth/Healthtrackr.Auth.csproj --configuration Release --output ${{ env.OUTPUT_PATH }}
+      
+    - name: Package Functions
+      uses: actions/upload-artifact@v1
+      with:
+        name: functions
+        path: ${{ env.OUTPUT_PATH }}
+
+  deploy-function:
+    needs: build-function
+    runs-on: ubuntu-latest
+    env: 
+      FUNC_APP_NAME: func-healthtrackrauth-prod
+    
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: functions
+          path: ${{ env.OUTPUT_PATH }}
+        
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+            client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        
+      - name: Deploy Function to Azure
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ env.FUNC_APP_NAME }}
+          package: ${{ env.OUTPUT_PATH }}
