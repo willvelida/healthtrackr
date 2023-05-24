@@ -57,7 +57,7 @@ jobs:
         name: Run what-if
         with:
           inlineScript: |
-            az deployment group what-if --resource-group ${{ secrets.AZURE_RG }} --template-file ./Healthtrackr.Infrastructure/main.bicep --parameters ./HealthCheckr.Infrastructure/parameters.prod.json emailAddress=${{ secrets.EMAIL_ADDRESS }}
+            az deployment group what-if --resource-group ${{ secrets.AZURE_RG }} --template-file ./Healthtrackr.Infrastructure/main.bicep --parameters ./Healthtrackr.Infrastructure/parameters.prod.json emailAddress=${{ secrets.EMAIL_ADDRESS }}
   deploy:
     runs-on: ubuntu-latest
     environment: Production
