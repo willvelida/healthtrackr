@@ -60,7 +60,7 @@ jobs:
         name: Run what-if
         with:
           inlineScript: |
-            az deployment group what-if --resource-group ${{ secrets.AZURE_RG }} --template-file ./HealthHealthtrackr.Auth/deploy/main.bicep --parameters ./Healthtrackr.Auth/deploy/parameters.prod.json
+            az deployment group what-if --resource-group ${{ secrets.AZURE_RG }} --template-file ./Healthtrackr.Auth/deploy/main.bicep --parameters ./Healthtrackr.Auth/deploy/parameters.prod.json
   deploy-infra:
     runs-on: ubuntu-latest
     environment: Production
