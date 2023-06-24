@@ -16,6 +16,18 @@
         },
         "functionAppName": {
             "value": "func-htactivity-prod"
+        },
+        "cosmosDbAccountName": {
+            "value": "cosmosdb-healthtrackr-prod"
+        },
+        "cosmosDatabaseName": {
+            "value": "HealthTrackrDB"
+        },
+        "serviceBusNamespace": {
+            "value": "sb-healthtrackr-prod"
+        },
+        "appConfigName": {
+            "value": "appconfig-healthtrackr-prod"
         }
     }
 }
