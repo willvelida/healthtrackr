@@ -48,7 +48,7 @@ resource container 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/container
 }
 
 resource cosmosContainerSetting 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
-  name: 'HealthCheckr:${containerName}ContainerName'
+  name: 'Healthtrackr:${containerName}ContainerName'
   parent: appConfig
   properties: {
     value: container.name

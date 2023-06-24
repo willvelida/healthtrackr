@@ -80,7 +80,7 @@ resource activityQueue 'Microsoft.ServiceBus/namespaces/queues@2021-11-01' = {
 
 resource activityQueueSetting 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
   parent: appConfig
-  name: 'HealthCheckr:ActivityQueueName'
+  name: 'Healthtrackr:ActivityQueueName'
   properties: {
     value: activityQueue.name
     tags: tags
@@ -187,7 +187,6 @@ resource accessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2022-07-01' = 
           secrets: [
             'get'
             'list'
-            'set'
           ]
         }
       }
