@@ -1,5 +1,12 @@
 name: HealthCheckr.Activity
 
+env:
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
+  DOTNET_VERSION: 6.0.x
+  OUTPUT_PATH: ${{ github.workspace }}/.output
+  COVERAGE_PATH: ${{ github.workspace }}/.coverage
+  COVERAGE_LOCATION: ${{ github.workspace }}/.coverage
+
 on:
   push:
     branches:
@@ -77,3 +84,62 @@ jobs:
           template: ./Healthtrackr.Activity/deploy/main.bicep
           parameters: ./Healthtrackr.Activity/deploy/parameters.prod.json
           failOnStdErr: false
+
+  build-function:
+    needs: deploy-infra
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: './HealthCheckr.Activity/src/HealthCheckr.Activity/'
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v2
+              
+      - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+      - name: 'Install dependencies'
+        run: dotnet restore
+        
+      - name: 'Build project'
+        run: dotnet build --no-restore
+        
+      - name: Test
+        run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --logger trx --results-directory ${{ env.COVERAGE_PATH }}
+           
+      - name: Publish Functions
+        run: dotnet publish ./HealthCheckr.Activity/HealthCheckr.Activity.csproj --configuration Release --output ${{ env.OUTPUT_PATH }}
+              
+      - name: Package Functions
+        uses: actions/upload-artifact@v1
+        with:
+            name: activity-function
+            path: ${{ env.OUTPUT_PATH }}
+        
+  deploy-function:
+      needs: build-function
+      runs-on: ubuntu-latest
+      env: 
+        FUNC_APP_NAME: func-healthcheckractivity-prod
+            
+      steps:
+       - name: Download Artifact
+         uses: actions/download-artifact@v1
+         with:
+            name: activity-function
+            path: ${{ env.OUTPUT_PATH }}
+                
+       - name: "Login via Azure CLI"
+         uses: azure/login@v1
+         with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+                
+       - name: Deploy Function to Azure
+         uses: Azure/functions-action@v1
+         with:
+            app-name: ${{ env.FUNC_APP_NAME }}
+            package: ${{ env.OUTPUT_PATH }}

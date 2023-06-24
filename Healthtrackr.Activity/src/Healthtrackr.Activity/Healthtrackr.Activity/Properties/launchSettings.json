@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Healthtrackr.Activity": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7116",
+      "launchBrowser": false
+    }
+  }
+}
