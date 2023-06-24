@@ -14,14 +14,11 @@ namespace Healthtrackr.Activity.Functions
         private readonly IFitbitService _fitbitService;
         private readonly IActivityService _activityService;
         private readonly ILogger<ManuallyRetrieveActivitySummaryByDate> _logger;
-        private readonly Settings _settings;
 
         public ManuallyRetrieveActivitySummaryByDate(IFitbitService fitbitService,
             IActivityService activityService,
-            ILogger<ManuallyRetrieveActivitySummaryByDate> logger,
-            IOptions<Settings> options)
+            ILogger<ManuallyRetrieveActivitySummaryByDate> logger)
         {
-            _settings = options.Value;
             _fitbitService = fitbitService;
             _activityService = activityService;
             _logger = logger;
@@ -45,7 +42,7 @@ namespace Healthtrackr.Activity.Functions
                 var activityResponse = await _fitbitService.GetActivityResponse(activityDate);
 
                 _logger.LogInformation($"Mapping response to Activity object and Sending to queue.");
-                await _activityService.SendRecordToQueue(activityResponse, _settings.ActivityQueueName);
+                await _activityService.MapActivityEnvelopeAndSaveToDatabase(activityDate, activityResponse);
                 _logger.LogInformation($"Activity Summary sent to queue.");
 
                 result = new OkResult();
