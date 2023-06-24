@@ -28,17 +28,21 @@ namespace Healthtrackr.Activity.Functions
         }
 
         [Function(nameof(ManuallyRetrieveActivitySummaryByDate))]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "activityDate")] HttpRequestData req, string activityDate)
         {
             IActionResult result;
 
             try
             {
                 _logger.LogInformation($"{nameof(ManuallyRetrieveActivitySummaryByDate)} executed at: {DateTime.Now}");
-                var date = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
+                if (IsDateValid(activityDate) is false)
+                {
+                    result = new BadRequestResult();
+                    return result;
+                }
 
-                _logger.LogInformation($"Attempting to retrieve Daily Activity Summary for {date}");
-                var activityResponse = await _fitbitService.GetActivityResponse(date);
+                _logger.LogInformation($"Attempting to retrieve Daily Activity Summary for {activityDate}");
+                var activityResponse = await _fitbitService.GetActivityResponse(activityDate);
 
                 _logger.LogInformation($"Mapping response to Activity object and Sending to queue.");
                 await _activityService.SendRecordToQueue(activityResponse, _settings.ActivityQueueName);
@@ -53,6 +57,20 @@ namespace Healthtrackr.Activity.Functions
             }
 
             return result;
+        }
+
+        private bool IsDateValid(string date)
+        {
+            bool isDateValid = false;
+            string pattern = "yyyy-MM-dd";
+            DateTime parsedActivityDate;
+
+            if (DateTime.TryParseExact(date, pattern, null, System.Globalization.DateTimeStyles.None, out parsedActivityDate))
+            {
+                isDateValid = true;
+            }
+
+            return isDateValid;
         }
     }
 }
