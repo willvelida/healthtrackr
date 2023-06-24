@@ -7,9 +7,6 @@ param appServicePlanName string
 @description('Specifies the name of the Application Insights resource')
 param appInsightsName string
 
-@description('Specifies the name of the Container App Environment')
-param containerAppEnvName string
-
 @description('Specifies the name of the Cosmos DB account')
 param cosmosDbAccountName string
 
@@ -87,18 +84,6 @@ module budget 'modules/budget.bicep' = {
   }
 }
 
-module containerAppEnv 'modules/container-app-environment.bicep' = {
-  name: 'caEnv'
-  params: {
-    aiConnectionString: keyVault.getSecret('AppInsConnectionString')
-    envName: containerAppEnvName
-    location: location
-    logAnalyticsId: logAnalytics.outputs.logAnalyticsId
-    logAnalyticsSharedKey: keyVault.getSecret('LogAnalyticsSharedKey')
-    tags: tags
-  }
-}
-
 module cosmosDb 'modules/cosmos-db.bicep' = {
   name: 'cosmos-db'
   params: {
@@ -111,19 +96,12 @@ module cosmosDb 'modules/cosmos-db.bicep' = {
   }
 }
 
-resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
-  name: keyVaultName
-  location: location
-  tags: tags
-  properties: {
-    sku: {
-      family: 'A'
-      name: 'standard'
-    }
-    tenantId: subscription().tenantId
-    enableSoftDelete: true
-    softDeleteRetentionInDays: 7
-    enabledForTemplateDeployment: true
+module keyVault 'modules/key-vault.bicep' = {
+  name: 'kv'
+  params: {
+    keyVaultName: keyVaultName
+    tags: tags
+    location: location
     accessPolicies: accessPolicies
   }
 }
