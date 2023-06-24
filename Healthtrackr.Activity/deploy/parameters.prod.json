@@ -15,7 +15,7 @@
             "value": "htactivitystorprod"
         },
         "functionAppName": {
-            "value": "func-healthtrackractivity-prod"
+            "value": "func-htactivity-prod"
         }
     }
 }
