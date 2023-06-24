@@ -7,6 +7,9 @@ param appServicePlanName string
 @description('Specifies the name of the Application Insights resource')
 param appInsightsName string
 
+@description('Specifies the name of the Container App Environment')
+param containerAppEnvName string
+
 @description('Specifies the name of the Cosmos DB account')
 param cosmosDbAccountName string
 
@@ -81,6 +84,17 @@ module budget 'modules/budget.bicep' = {
     budgetName: budgetName
     ownerEmailAddress: emailAddress
     startDate: budgetStartDate
+  }
+}
+
+module containerAppEnv 'modules/container-app-environment.bicep' = {
+  name: 'ca-env'
+  params: {
+    appInsightsName: appInsights.outputs.appInsightsName
+    envName: containerAppEnvName
+    location:location
+    logAnalyticsWorkspaceName: logAnalytics.outputs.logAnalyticsName
+    tags: tags
   }
 }
 

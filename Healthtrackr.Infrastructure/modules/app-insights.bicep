@@ -39,3 +39,5 @@ resource appInsightsConnectionStringSecret 'Microsoft.KeyVault/vaults/secrets@20
     value: appInsights.properties.ConnectionString
   }
 }
+
+output appInsightsName string = appInsights.name

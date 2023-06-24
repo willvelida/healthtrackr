@@ -42,3 +42,4 @@ resource lawSharedKeySecret 'Microsoft.KeyVault/vaults/secrets@2023-02-01' = {
 }
 
 output logAnalyticsId string = logAnalytics.id
+output logAnalyticsName string = logAnalytics.name
