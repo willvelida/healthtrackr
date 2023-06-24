@@ -90,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: './HealthCheckr.Activity/src/HealthCheckr.Activity/'
+        working-directory: './Healthtrackr.Activity/src/Healthtrackr.Activity/'
     steps:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v2
@@ -110,7 +110,7 @@ jobs:
         run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --logger trx --results-directory ${{ env.COVERAGE_PATH }}
            
       - name: Publish Functions
-        run: dotnet publish ./HealthCheckr.Activity/HealthCheckr.Activity.csproj --configuration Release --output ${{ env.OUTPUT_PATH }}
+        run: dotnet publish ./Healthtrackr.Activity/Healthtrackr.Activity.csproj --configuration Release --output ${{ env.OUTPUT_PATH }}
               
       - name: Package Functions
         uses: actions/upload-artifact@v1
