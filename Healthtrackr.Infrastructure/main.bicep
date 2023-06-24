@@ -7,6 +7,9 @@ param appServicePlanName string
 @description('Specifies the name of the Application Insights resource')
 param appInsightsName string
 
+@description('Specifies the name of the Container App Environment')
+param containerAppEnvName string
+
 @description('Specifies the name of the Cosmos DB account')
 param cosmosDbAccountName string
 
@@ -34,6 +37,9 @@ param budgetName string
 @description('The email address to use for the budget')
 param emailAddress string
 
+@description('Flag to indicate if this is a new Key Vault, and therefore should have no access policies configured. Default is false')
+param isNewKeyVault bool = false
+
 var tags = {
   ApplicationName: 'Healthtrackr'
   Component: 'Infrastructure'
@@ -41,6 +47,7 @@ var tags = {
   LastDeployed: lastDeployed
 }
 var budgetStartDate = '2023-01-01'
+var accessPolicies = isNewKeyVault ? [] : reference(resourceId('Microsoft.KeyVault/vaults', keyVaultName), '2022-07-01').accessPolicies
 
 module appServicePlan 'modules/app-service-plan.bicep' = {
   name: 'asp'
@@ -58,6 +65,7 @@ module appInsights 'modules/app-insights.bicep' = {
     tags: tags
     location: location
     logAnalyticsId: logAnalytics.outputs.logAnalyticsId
+    keyVaultName: keyVault.name
   }
 }
 
@@ -79,25 +87,44 @@ module budget 'modules/budget.bicep' = {
   }
 }
 
+module containerAppEnv 'modules/container-app-environment.bicep' = {
+  name: 'caEnv'
+  params: {
+    aiConnectionString: keyVault.getSecret('AppInsConnectionString')
+    envName: containerAppEnvName
+    location: location
+    logAnalyticsId: logAnalytics.outputs.logAnalyticsId
+    logAnalyticsSharedKey: keyVault.getSecret('LogAnalyticsSharedKey')
+    tags: tags
+  }
+}
+
 module cosmosDb 'modules/cosmos-db.bicep' = {
   name: 'cosmos-db'
   params: {
     appConfigName: appConfig.outputs.appConfigName
     cosmosDBAccountName: cosmosDbAccountName
     databaseName: cosmosDbDatabaseName
-    keyVaultName: keyVault.outputs.keyVaultName
+    keyVaultName: keyVault.name
     location: location
     tags: tags
   }
 }
 
-module keyVault 'modules/key-vault.bicep' = {
-  name: 'kv'
-  params: {
-    accessPolicies: [] 
-    keyVaultName: keyVaultName
-    tags: tags
-    location: location
+resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
+  name: keyVaultName
+  location: location
+  tags: tags
+  properties: {
+    sku: {
+      family: 'A'
+      name: 'standard'
+    }
+    tenantId: subscription().tenantId
+    enableSoftDelete: true
+    softDeleteRetentionInDays: 7
+    enabledForTemplateDeployment: true
+    accessPolicies: accessPolicies
   }
 }
 
@@ -107,6 +134,7 @@ module logAnalytics 'modules/log-analytics.bicep' = {
     location: location 
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
     tags: tags
+    keyVaultName: keyVault.name
   }
 }
 

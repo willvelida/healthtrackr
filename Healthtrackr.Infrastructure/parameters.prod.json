@@ -14,6 +14,9 @@
         "keyVaultName": {
             "value": "kv-healthtrackr-prod"
         },
+        "containerAppEnvName": {
+            "value": "env-healthtrackr-prod"
+        },
         "cosmosDbAccountName": {
             "value": "cosmosdb-healthtrackr-prod"
         },
