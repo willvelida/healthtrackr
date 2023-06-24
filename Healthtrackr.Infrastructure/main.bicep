@@ -62,7 +62,7 @@ module appInsights 'modules/app-insights.bicep' = {
     tags: tags
     location: location
     logAnalyticsId: logAnalytics.outputs.logAnalyticsId
-    keyVaultName: keyVault.name
+    keyVaultName: keyVault.outputs.keyVaultName
   }
 }
 
@@ -90,7 +90,7 @@ module cosmosDb 'modules/cosmos-db.bicep' = {
     appConfigName: appConfig.outputs.appConfigName
     cosmosDBAccountName: cosmosDbAccountName
     databaseName: cosmosDbDatabaseName
-    keyVaultName: keyVault.name
+    keyVaultName: keyVault.outputs.keyVaultName
     location: location
     tags: tags
   }
@@ -112,7 +112,7 @@ module logAnalytics 'modules/log-analytics.bicep' = {
     location: location 
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
     tags: tags
-    keyVaultName: keyVault.name
+    keyVaultName: keyVault.outputs.keyVaultName
   }
 }
 
