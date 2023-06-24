@@ -28,7 +28,7 @@ namespace Healthtrackr.Activity.Functions
         }
 
         [Function(nameof(ManuallyRetrieveActivitySummaryByDate))]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "activityDate")] HttpRequestData req, string activityDate)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "{activityDate}")] HttpRequestData req, string activityDate)
         {
             IActionResult result;
 
