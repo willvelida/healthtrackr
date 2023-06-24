@@ -21,6 +21,20 @@ namespace Healthtrackr.Activity.Services
             _logger = logger;
         }
 
+        public bool IsDateValid(string date)
+        {
+            bool isDateValid = false;
+            string pattern = "yyyy-MM-dd";
+            DateTime parsedActivityDate;
+
+            if (DateTime.TryParseExact(date, pattern, null, System.Globalization.DateTimeStyles.None, out parsedActivityDate))
+            {
+                isDateValid = true;
+            }
+
+            return isDateValid;
+        }
+
         public async Task MapActivityEnvelopeAndSaveToDatabase(string date, ActivityResponse activityResponse)
         {
             try

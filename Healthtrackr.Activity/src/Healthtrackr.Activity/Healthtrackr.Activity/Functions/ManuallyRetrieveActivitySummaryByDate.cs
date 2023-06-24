@@ -32,7 +32,7 @@ namespace Healthtrackr.Activity.Functions
             try
             {
                 _logger.LogInformation($"{nameof(ManuallyRetrieveActivitySummaryByDate)} executed at: {DateTime.Now}");
-                if (IsDateValid(activityDate) is false)
+                if (_activityService.IsDateValid(activityDate) is false)
                 {
                     result = new BadRequestResult();
                     return result;
@@ -54,20 +54,6 @@ namespace Healthtrackr.Activity.Functions
             }
 
             return result;
-        }
-
-        private bool IsDateValid(string date)
-        {
-            bool isDateValid = false;
-            string pattern = "yyyy-MM-dd";
-            DateTime parsedActivityDate;
-
-            if (DateTime.TryParseExact(date, pattern, null, System.Globalization.DateTimeStyles.None, out parsedActivityDate))
-            {
-                isDateValid = true;
-            }
-
-            return isDateValid;
         }
     }
 }

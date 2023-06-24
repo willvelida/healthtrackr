@@ -115,5 +115,32 @@ namespace Healthtrackr.Activity.Services.UnitTests
             await activityServiceAction.Should().ThrowAsync<Exception>();
             _loggerMock.VerifyLog(logger => logger.LogError($"Exception thrown in SendRecordToQueue: Mock Failure"));
         }
+
+        [Theory]
+        [InlineData("25/06/2023")]
+        [InlineData("06/25/2023")]
+        [InlineData("06-25-2023")]
+        [InlineData("25-06-2023")]
+        public void ReturnFalseWhenPassingIncorrectDateFormatToIsDateValid(string testDate)
+        {
+            // ACT
+            var expectedFalseResponse = _activityServiceSut.IsDateValid(testDate);
+
+            // ASSERT
+            expectedFalseResponse.Should().BeFalse();
+        }
+
+        [Fact]
+        public void ReturnTrueWhenPassingCorrectDateFormatToIsDateValid()
+        {
+            // ARRANGE
+            var testDate = "2023-06-25";
+
+            // ACT
+            var expectedFalseResponse = _activityServiceSut.IsDateValid(testDate);
+
+            // ASSERT
+            expectedFalseResponse.Should().BeTrue();
+        }
     }
 }
