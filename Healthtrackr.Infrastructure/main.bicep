@@ -10,6 +10,9 @@ param appInsightsName string
 @description('Specifies the name of the Container App Environment')
 param containerAppEnvName string
 
+@description('Specifies the name of the Container Registry')
+param containerRegistryName string
+
 @description('Specifies the name of the Cosmos DB account')
 param cosmosDbAccountName string
 
@@ -94,6 +97,15 @@ module containerAppEnv 'modules/container-app-environment.bicep' = {
     envName: containerAppEnvName
     location:location
     logAnalyticsWorkspaceName: logAnalytics.outputs.logAnalyticsName
+    tags: tags
+  }
+}
+
+module containerRegistry 'modules/container-registry.bicep' = {
+  name: 'acr'
+  params: {
+    containerRegistryName: containerRegistryName
+    location: location
     tags: tags
   }
 }

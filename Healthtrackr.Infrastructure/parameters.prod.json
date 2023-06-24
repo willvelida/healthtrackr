@@ -17,6 +17,9 @@
         "containerAppEnvName": {
             "value": "env-healthtrackr-prod"
         },
+        "containerRegistryName": {
+            "value": "acrhealthtrackrprod"
+        },
         "cosmosDbAccountName": {
             "value": "cosmosdb-healthtrackr-prod"
         },
