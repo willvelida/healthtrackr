@@ -100,7 +100,7 @@ jobs:
           action: 'publish'
 
   build-function:
-    needs: deploy-infra
+    needs: deploy-sql-tables
     runs-on: ubuntu-latest
     defaults:
       run:
