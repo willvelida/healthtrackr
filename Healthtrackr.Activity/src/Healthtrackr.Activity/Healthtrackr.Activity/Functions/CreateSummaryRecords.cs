@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Healthtrackr.Activity.Common.Models;
 using Healthtrackr.Activity.Services.Interfaces;
 using Microsoft.Azure.Functions.Worker;
@@ -7,18 +5,18 @@ using Microsoft.Extensions.Logging;
 
 namespace Healthtrackr.Activity.Functions
 {
-    public class CreateActivitySummaries
+    public class CreateSummaryRecords
     {
         private readonly IActivityService _activityService;
-        private readonly ILogger<CreateActivitySummaries> _logger;
+        private readonly ILogger<CreateSummaryRecords> _logger;
 
-        public CreateActivitySummaries(IActivityService activityService, ILogger<CreateActivitySummaries> logger)
+        public CreateSummaryRecords(IActivityService activityService, ILogger<CreateSummaryRecords> logger)
         {
             _activityService = activityService;
             _logger = logger;
         }
 
-        [Function(nameof(CreateActivitySummaries))]
+        [Function(nameof(CreateSummaryRecords))]
         public async Task Run([CosmosDBTrigger(
             databaseName: "HealthTrackrDB",
             containerName: "Activity",
@@ -34,9 +32,8 @@ namespace Healthtrackr.Activity.Functions
                     foreach (var activityEnvelope in activityEnvelopes)
                     {
                         _logger.LogInformation($"Attempting to normalize Activity Envelope for {activityEnvelope.Date}");
-                        await _activityService.MapAndSaveActivityHeartRateRecord(activityEnvelope);
-                        await _activityService.MapAndSaveActivityDistanceRecord(activityEnvelope);
                         await _activityService.MapAndSaveActivitySummaryRecord(activityEnvelope);
+                        _logger.LogInformation($"Activity Summary Record for {activityEnvelope.Date} persisted. Adding specific activities.");
                         await _activityService.MapAndSaveActivityRecords(activityEnvelope);
                         _logger.LogInformation($"Records for {activityEnvelope.Date} saved");
                     }
@@ -44,7 +41,7 @@ namespace Healthtrackr.Activity.Functions
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception thrown in {nameof(CreateActivitySummaries)}: {ex.Message}");
+                _logger.LogError($"Exception thrown in {nameof(CreateSummaryRecords)}: {ex.Message}");
                 throw;
             }
         }

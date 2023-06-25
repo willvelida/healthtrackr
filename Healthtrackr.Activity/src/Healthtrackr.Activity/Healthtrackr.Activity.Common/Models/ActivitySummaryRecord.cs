@@ -8,17 +8,15 @@ namespace Healthtrackr.Activity.Common.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public int CaloriesOut { get; set; }
-        public int ActivityCalories { get; set; }
-        public double Elevation { get; set; }
-        public int FairlyActiveMinutes { get; set; }
-        public int LightlyActiveMinutes { get; set; }
-        public int SedentaryMinutes { get; set; }
-        public int VeryActiveMinutes { get; set; }
-        public int Floors { get; set; }
-        public int Steps { get; set; }
         public string Date { get; set; }
-        public int ActivityDistancesId { get; set; }
-        public int ActivityHeartRateZonesId { get; set; }
+        public int CaloriesBurned { get; set; }
+        public int Steps { get; set; }
+        public double Distance { get; set; }
+        public int Floors { get; set; }
+        public int MinutesSedentary { get; set; }
+        public int MinutesLightlyActive { get; set; }
+        public int MinutesFairlyActive { get; set; }
+        public int MinutesVeryActive { get; set; }
+        public int ActivityCalories { get; set; }
     }
 }

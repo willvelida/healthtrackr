@@ -19,8 +19,6 @@ using Polly.Extensions.Http;
 
 var mappingConfig = new MapperConfiguration(cfg =>
 {
-    cfg.AddProfile(new MapHeartRateZoneToActivityHeartRateZonesRecord());
-    cfg.AddProfile(new MapDistanceToActivityDistancesRecord());
     cfg.AddProfile(new MapSummaryToActivitySummaryRecord());
     cfg.AddProfile(new MapActivityToActivityRecord());
 });

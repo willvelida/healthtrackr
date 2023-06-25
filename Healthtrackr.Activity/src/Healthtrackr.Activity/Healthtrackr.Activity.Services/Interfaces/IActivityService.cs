@@ -7,8 +7,6 @@ namespace Healthtrackr.Activity.Services.Interfaces
     {
         bool IsDateValid(string date);
         Task MapActivityEnvelopeAndSaveToDatabase(string date, ActivityResponse activityResponse);
-        Task MapAndSaveActivityHeartRateRecord(ActivityEnvelope activityEnvelope);
-        Task MapAndSaveActivityDistanceRecord(ActivityEnvelope activityEnvelope);
         Task MapAndSaveActivitySummaryRecord(ActivityEnvelope activityEnvelope);
         Task MapAndSaveActivityRecords(ActivityEnvelope activityEnvelope);
         Task SendRecordToQueue<T>(T record, string queueName);

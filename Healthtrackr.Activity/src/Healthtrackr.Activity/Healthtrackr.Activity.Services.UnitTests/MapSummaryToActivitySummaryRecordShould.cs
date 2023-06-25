@@ -1,10 +1,9 @@
 ﻿using AutoFixture;
 using AutoMapper;
-using FluentAssertions;
 using FluentAssertions.Execution;
-using Healthtrackr.Activity.Common.FitbitResponses;
 using Healthtrackr.Activity.Common.Models;
 using Healthtrackr.Activity.Services.Mappers;
+using res = Healthtrackr.Activity.Common.FitbitResponses;
 
 namespace Healthtrackr.Activity.Services.UnitTests
 {
@@ -27,23 +26,23 @@ namespace Healthtrackr.Activity.Services.UnitTests
         {
             // ARRANGE
             var fixture = new Fixture();
-            var summary = fixture.Create<Summary>();
+            var summary = fixture.Create<res.Summary>();
 
             // ACT
-            var expectedActivitySummaryRecord = _mapper.Map<ActivitySummaryRecord>(summary);
+            var activitySummaryRecord = _mapper.Map<ActivitySummaryRecord>(summary);
 
             // ASSERT
             using (new AssertionScope())
             {
-                expectedActivitySummaryRecord.CaloriesOut.Should().Be(summary.caloriesOut);
-                expectedActivitySummaryRecord.ActivityCalories.Should().Be(summary.activityCalories);
-                expectedActivitySummaryRecord.Elevation.Should().Be(summary.elevation);
-                expectedActivitySummaryRecord.FairlyActiveMinutes.Should().Be(summary.fairlyActiveMinutes);
-                expectedActivitySummaryRecord.Floors.Should().Be(summary.floors);
-                expectedActivitySummaryRecord.LightlyActiveMinutes.Should().Be(summary.lightlyActiveMinutes);
-                expectedActivitySummaryRecord.SedentaryMinutes.Should().Be(summary.sedentaryMinutes);
-                expectedActivitySummaryRecord.Steps.Should().Be(summary.steps);
-                expectedActivitySummaryRecord.VeryActiveMinutes.Should().Be(summary.veryActiveMinutes);
+                Assert.Equal(summary.caloriesOut, activitySummaryRecord.CaloriesBurned);
+                Assert.Equal(summary.steps, activitySummaryRecord.Steps);
+                Assert.Equal(summary.distances.Where(d => d.activity == "total").Select(d => d.distance).FirstOrDefault(), activitySummaryRecord.Distance);
+                Assert.Equal(summary.floors, activitySummaryRecord.Floors);
+                Assert.Equal(summary.sedentaryMinutes, activitySummaryRecord.MinutesSedentary);
+                Assert.Equal(summary.lightlyActiveMinutes, activitySummaryRecord.MinutesLightlyActive);
+                Assert.Equal(summary.fairlyActiveMinutes, activitySummaryRecord.MinutesFairlyActive);
+                Assert.Equal(summary.veryActiveMinutes, activitySummaryRecord.MinutesVeryActive);
+                Assert.Equal(summary.activityCalories, activitySummaryRecord.ActivityCalories);
             }
         }
     }

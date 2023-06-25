@@ -9,6 +9,5 @@
         public int Steps { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }
-        public int ActivitySummaryId { get; set; }
     }
 }

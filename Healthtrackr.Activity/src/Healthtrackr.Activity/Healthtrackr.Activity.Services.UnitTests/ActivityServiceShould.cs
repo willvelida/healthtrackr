@@ -32,8 +32,6 @@ namespace Healthtrackr.Activity.Services.UnitTests
             _loggerMock = new Mock<ILogger<ActivityService>>();
 
             _mapperMock.Setup(x => x.Map(It.IsAny<res.Activity>(), It.IsAny<ActivityRecord>())).Verifiable();
-            _mapperMock.Setup(x => x.Map(It.IsAny<res.Distance>(), It.IsAny<ActivityDistancesRecord>())).Verifiable();
-            _mapperMock.Setup(x => x.Map(It.IsAny<res.HeartRateZone>(), It.IsAny<ActivityHeartRateZonesRecord>())).Verifiable();
             _mapperMock.Setup(x => x.Map(It.IsAny<res.Summary>(), It.IsAny<ActivitySummaryRecord>())).Verifiable();
 
             _activityServiceSut = new ActivityService(_serviceBusMock.Object, _cosmosRepoMock.Object, _loggerMock.Object, _mapperMock.Object, _activityRepoMock.Object);
@@ -77,118 +75,6 @@ namespace Healthtrackr.Activity.Services.UnitTests
             // ASSERT
             await activityServiceAction.Should().ThrowAsync<Exception>();
             _loggerMock.VerifyLog(logger => logger.LogError($"Exception thrown in MapActivityEnvelopeAndSaveToDatabase: Mock Failure"));
-        }
-
-        [Fact]
-        public async Task MapAndSaveActivityHeartRateRecordSuccessfully()
-        {
-            // ARRANGE
-            var fixture = new Fixture();
-            var activityEnvelope = fixture.Create<ActivityEnvelope>();
-            activityEnvelope.Date = "2023-01-01";
-
-            _activityRepoMock
-                .Setup(x => x.AddActivityHeartRateZoneRecord(It.IsAny<ActivityHeartRateZonesRecord>()))
-                .Returns(Task.CompletedTask);
-
-            // ACT
-            Func<Task> activityServiceAction = async () => await _activityServiceSut.MapAndSaveActivityHeartRateRecord(activityEnvelope);
-
-            // ASSERT
-            await activityServiceAction.Should().NotThrowAsync<Exception>();
-        }
-
-        [Fact]
-        public async Task NotThrowExceptionWhenHeartRateZonesAreNull()
-        {
-            // ARRANGE
-            var fixture = new Fixture();
-            var activityEnvelope = fixture.Create<ActivityEnvelope>();
-            activityEnvelope.Date = "2023-01-01";
-            activityEnvelope.Activity.summary.heartRateZones = null;
-
-            // ACT
-            Func<Task> activityServiceAction = async () => await _activityServiceSut.MapAndSaveActivityHeartRateRecord(activityEnvelope);
-
-            // ASSERT
-            await activityServiceAction.Should().NotThrowAsync<NullReferenceException>();
-            _loggerMock.VerifyLog(logger => logger.LogInformation($"No Heart Rate Zones to map. Exiting."));
-        }
-
-        [Fact]
-        public async Task ThrowExceptionWhenAddActivityHeartRateZoneRecordFails()
-        {
-            // ARRANGE
-            var fixture = new Fixture();
-            var activityEnvelope = fixture.Create<ActivityEnvelope>();
-            activityEnvelope.Date = "2023-01-01";
-
-            _activityRepoMock
-                .Setup(x => x.AddActivityHeartRateZoneRecord(It.IsAny<ActivityHeartRateZonesRecord>()))
-                .ThrowsAsync(new Exception("Mock Failure"));
-
-            // ACT
-            Func<Task> activityServiceAction = async () => await _activityServiceSut.MapAndSaveActivityHeartRateRecord(activityEnvelope);
-
-            // ASSERT
-            await activityServiceAction.Should().ThrowAsync<Exception>();
-            _loggerMock.VerifyLog(logger => logger.LogError($"Exception thrown in MapAndSaveActivityHeartRateRecord: Mock Failure"));
-        }
-
-        [Fact]
-        public async Task MapAndSaveActivityDistanceRecordSuccessfully()
-        {
-            // ARRANGE
-            var fixture = new Fixture();
-            var activityEnvelope = fixture.Create<ActivityEnvelope>();
-            activityEnvelope.Date = "2023-01-01";
-
-            _activityRepoMock
-                .Setup(x => x.AddActivityDistancesRecord(It.IsAny<ActivityDistancesRecord>()))
-                .Returns(Task.CompletedTask);
-
-            // ACT
-            Func<Task> activityServiceAction = async () => await _activityServiceSut.MapAndSaveActivityDistanceRecord(activityEnvelope);
-
-            // ASSERT
-            await activityServiceAction.Should().NotThrowAsync<Exception>();
-        }
-
-        [Fact]
-        public async Task NotThrowExceptionWhenDistancesAreNull()
-        {
-            // ARRANGE
-            var fixture = new Fixture();
-            var activityEnvelope = fixture.Create<ActivityEnvelope>();
-            activityEnvelope.Date = "2023-01-01";
-            activityEnvelope.Activity.summary.distances = null;
-
-            // ACT
-            Func<Task> activityServiceAction = async () => await _activityServiceSut.MapAndSaveActivityDistanceRecord(activityEnvelope);
-
-            // ASSERT
-            await activityServiceAction.Should().NotThrowAsync<NullReferenceException>();
-            _loggerMock.VerifyLog(logger => logger.LogInformation($"No Activity Distances to map. Exiting."));
-        }
-
-        [Fact]
-        public async Task ThrowExceptionWhenAddActivityDistancesRecordFails()
-        {
-            // ARRANGE
-            var fixture = new Fixture();
-            var activityEnvelope = fixture.Create<ActivityEnvelope>();
-            activityEnvelope.Date = "2023-01-01";
-
-            _activityRepoMock
-                .Setup(x => x.AddActivityDistancesRecord(It.IsAny<ActivityDistancesRecord>()))
-                .ThrowsAsync(new Exception("Mock Failure"));
-
-            // ACT
-            Func<Task> activityServiceAction = async () => await _activityServiceSut.MapAndSaveActivityDistanceRecord(activityEnvelope);
-
-            // ASSERT
-            await activityServiceAction.Should().ThrowAsync<Exception>();
-            _loggerMock.VerifyLog(logger => logger.LogError($"Exception thrown in MapAndSaveActivityDistanceRecord: Mock Failure"));
         }
 
         [Fact]
@@ -254,19 +140,10 @@ namespace Healthtrackr.Activity.Services.UnitTests
             var fixture = new Fixture();
             var activityEnvelope = fixture.Create<ActivityEnvelope>();
             activityEnvelope.Date = "2023-01-01";
-            var heartRateZoneId = 1;
-            var distanceId = 1;
+
 
             _activityRepoMock
-                .Setup(x => x.GetActivityHeartRateZoneId())
-                .ReturnsAsync(heartRateZoneId);
-
-            _activityRepoMock
-                .Setup(x => x.GetActivityDistanceId())
-                .ReturnsAsync(distanceId);
-
-            _activityRepoMock
-                .Setup(x => x.AddActivitySummaryRecord(It.IsAny<ActivitySummaryRecord>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Setup(x => x.AddActivitySummaryRecord(It.IsAny<ActivitySummaryRecord>()))
                 .Returns(Task.CompletedTask);
 
             // ACT
@@ -274,8 +151,6 @@ namespace Healthtrackr.Activity.Services.UnitTests
 
             // ASSERT
             await activityServiceAction.Should().NotThrowAsync<Exception>();
-            _activityRepoMock.Verify(x => x.GetActivityHeartRateZoneId(), Times.Once);
-            _activityRepoMock.Verify(x => x.GetActivityDistanceId(), Times.Once);
         }
 
         [Fact]
@@ -302,64 +177,9 @@ namespace Healthtrackr.Activity.Services.UnitTests
             var fixture = new Fixture();
             var activityEnvelope = fixture.Create<ActivityEnvelope>();
             activityEnvelope.Date = "2023-01-01";
-            var heartRateZoneId = 1;
-            var distanceId = 1;
 
             _activityRepoMock
-                .Setup(x => x.GetActivityHeartRateZoneId())
-                .ReturnsAsync(heartRateZoneId);
-
-            _activityRepoMock
-                .Setup(x => x.GetActivityDistanceId())
-                .ReturnsAsync(distanceId);
-
-            _activityRepoMock
-                .Setup(x => x.AddActivitySummaryRecord(It.IsAny<ActivitySummaryRecord>(), It.IsAny<int>(), It.IsAny<int>()))
-                .ThrowsAsync(new Exception("Mock Failure"));
-
-            // ACT
-            Func<Task> activityServiceAction = async () => await _activityServiceSut.MapAndSaveActivitySummaryRecord(activityEnvelope);
-
-            // ASSERT
-            await activityServiceAction.Should().ThrowAsync<Exception>();
-            _loggerMock.VerifyLog(logger => logger.LogError($"Exception thrown in MapAndSaveActivitySummaryRecord: Mock Failure"));
-        }
-
-        [Fact]
-        public async Task ThrowExceptionWhenGetActivityDistanceIdFails()
-        {
-            // ARRANGE
-            var fixture = new Fixture();
-            var activityEnvelope = fixture.Create<ActivityEnvelope>();
-            activityEnvelope.Date = "2023-01-01";
-            var heartRateZoneId = 1;
-
-            _activityRepoMock
-                .Setup(x => x.GetActivityHeartRateZoneId())
-                .ReturnsAsync(heartRateZoneId);
-
-            _activityRepoMock
-                .Setup(x => x.GetActivityDistanceId())
-                .ThrowsAsync(new Exception("Mock Failure"));
-
-            // ACT
-            Func<Task> activityServiceAction = async () => await _activityServiceSut.MapAndSaveActivitySummaryRecord(activityEnvelope);
-
-            // ASSERT
-            await activityServiceAction.Should().ThrowAsync<Exception>();
-            _loggerMock.VerifyLog(logger => logger.LogError($"Exception thrown in MapAndSaveActivitySummaryRecord: Mock Failure"));
-        }
-
-        [Fact]
-        public async Task ThrowExceptionWhenGetActivityHeartRateZoneIdFails()
-        {
-            // ARRANGE
-            var fixture = new Fixture();
-            var activityEnvelope = fixture.Create<ActivityEnvelope>();
-            activityEnvelope.Date = "2023-01-01";
-
-            _activityRepoMock
-                .Setup(x => x.GetActivityHeartRateZoneId())
+                .Setup(x => x.AddActivitySummaryRecord(It.IsAny<ActivitySummaryRecord>()))
                 .ThrowsAsync(new Exception("Mock Failure"));
 
             // ACT

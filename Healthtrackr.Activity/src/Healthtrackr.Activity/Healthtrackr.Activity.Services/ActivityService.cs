@@ -61,58 +61,6 @@ namespace Healthtrackr.Activity.Services
             }
         }
 
-        public async Task MapAndSaveActivityDistanceRecord(ActivityEnvelope activityEnvelope)
-        {
-            try
-            {
-                var distances = activityEnvelope.Activity.summary.distances;
-                if (distances is null)
-                {
-                    _logger.LogInformation($"No Activity Distances to map. Exiting.");
-                    return;
-                }
-
-                foreach (var distance in distances)
-                {
-                    var activityDistance = new ActivityDistancesRecord();
-                    _mapper.Map(distance, activityDistance);
-                    activityDistance.Date = activityEnvelope.Date;
-                    await _activityRepository.AddActivityDistancesRecord(activityDistance);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception thrown in {nameof(MapAndSaveActivityDistanceRecord)}: {ex.Message}");
-                throw;
-            }
-        }
-
-        public async Task MapAndSaveActivityHeartRateRecord(ActivityEnvelope activityEnvelope)
-        {
-            try
-            {
-                var heartRateZones = activityEnvelope.Activity.summary.heartRateZones;
-                if (heartRateZones is null)
-                {
-                    _logger.LogInformation($"No Heart Rate Zones to map. Exiting.");
-                    return;
-                }
-
-                foreach (var heartRateZone in heartRateZones)
-                {
-                    var heartRateRecord = new ActivityHeartRateZonesRecord();
-                    _mapper.Map(heartRateZone, heartRateRecord);
-                    heartRateRecord.Date = activityEnvelope.Date;
-                    await _activityRepository.AddActivityHeartRateZoneRecord(heartRateRecord);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception thrown in {nameof(MapAndSaveActivityHeartRateRecord)}: {ex.Message}");
-                throw;
-            }
-        }
-
         public async Task MapAndSaveActivityRecords(ActivityEnvelope activityEnvelope)
         {
             try
@@ -153,10 +101,8 @@ namespace Healthtrackr.Activity.Services
                 var activitySummaryRecord = new ActivitySummaryRecord();
                 _mapper.Map(activitySummary, activitySummaryRecord);
                 activitySummaryRecord.Date = activityEnvelope.Date;
-                var heartRateId = await _activityRepository.GetActivityHeartRateZoneId();
-                var distanceId = await _activityRepository.GetActivityDistanceId();
 
-                await _activityRepository.AddActivitySummaryRecord(activitySummaryRecord, heartRateId, distanceId);
+                await _activityRepository.AddActivitySummaryRecord(activitySummaryRecord);
             }
             catch (Exception ex)
             {

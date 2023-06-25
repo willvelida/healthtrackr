@@ -1,40 +1,16 @@
-CREATE TABLE [dbo].[ActivityHeartRateZones]
-(
-  [Id] INT IDENTITY NOT NULL PRIMARY KEY,
-  [Name] VARCHAR(50) NOT NULL,
-  [Minutes] INT NOT NULL,
-  [MaxHR] INT NOT NULL,
-  [MinHR] INT NOT NULL,
-  [CaloriesOut] DECIMAL(10,5) NOT NULL,
-  [Date] DATE NOT NULL,
-)
-GO;
-
-CREATE TABLE [dbo].[ActivityDistances]
-(
-  [Id] INT IDENTITY NOT NULL PRIMARY KEY,
-  [ActivityType] VARCHAR(50) NOT NULL,
-  [Distance] DECIMAL(10,5) NOT NULL,
-  [Date] DATE NOT NULL,
-)
-GO;
-
 CREATE TABLE [dbo].[ActivitySummary]
 (
   [Id] INT IDENTITY NOT NULL PRIMARY KEY,
-  [CaloriesOut] INT NOT NULL,
+  [CaloriesBurned] INT NOT NULL,
   [ActivityCalories] INT NOT NULL,
-  [Elevation] DECIMAL(10,5) NOT NULL,
-  [FairlyActiveMinutes] INT NOT NULL,
+  [Distance] DECIMAL(10,2) NOT NULL,
+  [MinutesFairlyActive] INT NOT NULL,
   [Floors] INT NOT NULL,
-  [LightlyActiveMinutes] INT NOT NULL,
-  [MarginalCalories] INT NOT NULL,
-  [SedentaryMinutes] INT NOT NULL,
+  [MinutesLightlyActive] INT NOT NULL,
+  [MinutesSedentary] INT NOT NULL,
   [Steps] INT NOT NULL,
-  [VeryActiveMinutes] INT NOT NULL,
+  [MinutesVeryActive] INT NOT NULL,
   [Date] DATE NOT NULL,
-  [ActivityDistancesId] INT FOREIGN KEY REFERENCES [dbo].[ActivityDistances] ([Id]),
-  [ActivityHeartRateZonesId] INT FOREIGN KEY REFERENCES [dbo].[ActivityHeartRateZones] ([Id]),
 )
 GO;
 
@@ -47,6 +23,5 @@ CREATE TABLE [dbo].[Activity]
   [Date] DATE NOT NULL,
   [Time] DATETIME NOT NULL,
   [Steps] INT NOT NULL,
-  [ActivitySummaryId] INT FOREIGN KEY REFERENCES [dbo].[ActivitySummary] ([Id]),
 )
 GO;
