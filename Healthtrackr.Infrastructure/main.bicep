@@ -34,6 +34,18 @@ param logAnalyticsWorkspaceName string
 @description('The timestamp that this template was last deployed')
 param lastDeployed string = utcNow()
 
+@description('The name of the SQL Server that will be deployed')
+param sqlServerName string
+
+@description('The administrator username of the SQL logical server')
+param sqlAdminLogin string
+
+@description('The administrator password of the SQL logical server')
+param sqlAdminPassword string
+
+@description('The name of the database in this Cosmos DB account')
+param databaseName string
+
 @description('Name of the Budget that will be created')
 param budgetName string
 
@@ -151,3 +163,15 @@ module serviceBus 'modules/service-bus.bicep' = {
   }
 }
 
+module sql 'modules/sql-server.bicep' = {
+  name: 'sql'
+  params: {
+    administratorLogin: sqlAdminLogin
+    administratorLoginPassword: sqlAdminPassword
+    serverName: sqlServerName
+    sqlDBName: databaseName
+    location: location
+    tags: tags
+    keyVaultName: keyVault.outputs.keyVaultName
+  }
+}

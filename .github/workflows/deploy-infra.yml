@@ -39,7 +39,7 @@ jobs:
           deploymentName: ${{ github.run_number }}
           resourceGroupName: ${{ secrets.AZURE_RG }}
           template: ./Healthtrackr.Infrastructure/main.bicep
-          parameters: ./Healthtrackr.Infrastructure/parameters.prod.json emailAddress=${{ secrets.EMAIL_ADDRESS }}
+          parameters: ./Healthtrackr.Infrastructure/parameters.prod.json emailAddress=${{ secrets.EMAIL_ADDRESS }} sqlAdminLogin=${{ secrets.SQL_ADMIN }} sqlAdminPassword=${{ secrets.SQL_PASSWORD }}
           deploymentMode: Validate
 
   preview:
@@ -57,7 +57,7 @@ jobs:
         name: Run what-if
         with:
           inlineScript: |
-            az deployment group what-if --resource-group ${{ secrets.AZURE_RG }} --template-file ./Healthtrackr.Infrastructure/main.bicep --parameters ./Healthtrackr.Infrastructure/parameters.prod.json emailAddress=${{ secrets.EMAIL_ADDRESS }}
+            az deployment group what-if --resource-group ${{ secrets.AZURE_RG }} --template-file ./Healthtrackr.Infrastructure/main.bicep --parameters ./Healthtrackr.Infrastructure/parameters.prod.json emailAddress=${{ secrets.EMAIL_ADDRESS }} sqlAdminLogin=${{ secrets.SQL_ADMIN }} sqlAdminPassword=${{ secrets.SQL_PASSWORD }}
   deploy:
     runs-on: ubuntu-latest
     environment: Production
@@ -76,5 +76,5 @@ jobs:
         with:
           resourceGroupName: ${{ secrets.AZURE_RG }}
           template: ./Healthtrackr.Infrastructure/main.bicep
-          parameters: ./Healthtrackr.Infrastructure/parameters.prod.json emailAddress=${{ secrets.EMAIL_ADDRESS }}
+          parameters: ./Healthtrackr.Infrastructure/parameters.prod.json emailAddress=${{ secrets.EMAIL_ADDRESS }} sqlAdminLogin=${{ secrets.SQL_ADMIN }} sqlAdminPassword=${{ secrets.SQL_PASSWORD }}
           failOnStdErr: false
