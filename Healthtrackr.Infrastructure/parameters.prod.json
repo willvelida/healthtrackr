@@ -37,6 +37,9 @@
         },
         "sqlServerName": {
             "value": "sql-healthtrackr-prod"
+        },
+        "databaseName": {
+            "value": "HealthTrackrDB"
         }
     }
 }
