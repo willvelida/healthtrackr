@@ -31,6 +31,18 @@ param serviceBusNamespace string
 @description('The name of the App Config instance that this function will use')
 param appConfigName string
 
+@description('The name of the SQL Server that this function app will use')
+param sqlServerName string
+
+@description('The name of the SQL database')
+param sqlDatabaseName string
+
+@description('The administrator username of the SQL logical server')
+param sqlAdminLogin string
+
+@description('The administrator password of the SQL logical server')
+param sqlAdminPassword string
+
 @description('The time that the resource was last deployed')
 param lastDeployed string = utcNow()
 
@@ -71,6 +83,10 @@ resource cosmosDb 'Microsoft.DocumentDB/databaseAccounts@2022-02-15-preview' exi
 
 resource serviceBus 'Microsoft.ServiceBus/namespaces@2021-11-01' existing = {
   name: serviceBusNamespace
+}
+
+resource sqlServer 'Microsoft.Sql/servers@2022-05-01-preview' existing = {
+  name: sqlServerName
 }
 
 resource activityQueue 'Microsoft.ServiceBus/namespaces/queues@2021-11-01' = {
@@ -161,6 +177,10 @@ resource functionApp 'Microsoft.Web/sites@2022-03-01' = {
         {
           name: 'AzureAppConfigEndpoint'
           value: appConfig.properties.endpoint
+        }
+        {
+          name: 'SqlConnectionString'
+          value: 'Server=tcp:${sqlServer.name}${environment().suffixes.sqlServerHostname},1433;Initial Catalog=${sqlDatabaseName};Persist Security Info=False;User ID=${sqlAdminLogin};Password=${sqlAdminPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
         }
         {
           name: 'WEBSITE_TIME_ZONE'

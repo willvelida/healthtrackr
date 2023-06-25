@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Activity", "Healthtrackr.Activity\Healthtrackr.Activity.csproj", "{179AA091-6AB5-4051-8C0E-2B8460C6D870}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Activity", "Healthtrackr.Activity\Healthtrackr.Activity.csproj", "{179AA091-6AB5-4051-8C0E-2B8460C6D870}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Activity.Common", "Healthtrackr.Activity.Common\Healthtrackr.Activity.Common.csproj", "{35BF039F-E9E7-476F-B228-16ED7BC68518}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Activity.Common", "Healthtrackr.Activity.Common\Healthtrackr.Activity.Common.csproj", "{35BF039F-E9E7-476F-B228-16ED7BC68518}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Activity.Repository", "Healthtrackr.Activity.Repository\Healthtrackr.Activity.Repository.csproj", "{0ECBEEF7-035F-4507-B9E0-F3EF4269841F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Activity.Repository", "Healthtrackr.Activity.Repository\Healthtrackr.Activity.Repository.csproj", "{0ECBEEF7-035F-4507-B9E0-F3EF4269841F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Activity.Services", "Healthtrackr.Activity.Services\Healthtrackr.Activity.Services.csproj", "{02DF3485-9EA4-44B6-8534-39FCA14C8F3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Activity.Services", "Healthtrackr.Activity.Services\Healthtrackr.Activity.Services.csproj", "{02DF3485-9EA4-44B6-8534-39FCA14C8F3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Activity.Services.UnitTests", "Healthtrackr.Activity.Services.UnitTests\Healthtrackr.Activity.Services.UnitTests.csproj", "{CA528FBC-A9DB-464C-95FD-292BFFE6F714}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Activity.Services.UnitTests", "Healthtrackr.Activity.Services.UnitTests\Healthtrackr.Activity.Services.UnitTests.csproj", "{CA528FBC-A9DB-464C-95FD-292BFFE6F714}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

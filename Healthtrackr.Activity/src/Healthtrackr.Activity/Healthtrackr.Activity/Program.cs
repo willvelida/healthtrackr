@@ -1,3 +1,4 @@
+using AutoMapper;
 using Azure.Identity;
 using Azure.Messaging.ServiceBus;
 using Azure.Security.KeyVault.Secrets;
@@ -6,13 +7,25 @@ using Healthtrackr.Activity.Repository;
 using Healthtrackr.Activity.Repository.Interfaces;
 using Healthtrackr.Activity.Services;
 using Healthtrackr.Activity.Services.Interfaces;
+using Healthtrackr.Activity.Services.Mappers;
 using Microsoft.Azure.Cosmos;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Polly;
 using Polly.Extensions.Http;
+
+var mappingConfig = new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile(new MapHeartRateZoneToActivityHeartRateZonesRecord());
+    cfg.AddProfile(new MapDistanceToActivityDistancesRecord());
+    cfg.AddProfile(new MapSummaryToActivitySummaryRecord());
+    cfg.AddProfile(new MapActivityToActivityRecord());
+});
+
+var mapper = mappingConfig.CreateMapper();
 
 var host = new HostBuilder()
     .ConfigureFunctionsWorkerDefaults()
@@ -35,6 +48,8 @@ var host = new HostBuilder()
         {
             configuration.GetSection("Healthtrackr").Bind(settings);
         });
+        s.AddAutoMapper(typeof(Program));
+        s.AddSingleton(mapper);
         s.AddSingleton(sp =>
         {
             IConfiguration configuration = sp.GetService<IConfiguration>();
@@ -55,7 +70,9 @@ var host = new HostBuilder()
             };
             return new CosmosClient(configuration["CosmosDbEndpoint"], new DefaultAzureCredential(), cosmosClientOptions);
         });
+        s.AddDbContext<ActivityContext>(opt => opt.UseSqlServer(Environment.GetEnvironmentVariable("SqlConnectionString")));
         s.AddTransient<ICosmosDbRepository, CosmosDbRepository>();
+        s.AddTransient<IActivityRepository, ActivityRepository>();
         s.AddTransient<IActivityService, ActivityService>();
         s.AddHttpClient<IFitbitService, FitbitService>()
             .SetHandlerLifetime(TimeSpan.FromMinutes(15))

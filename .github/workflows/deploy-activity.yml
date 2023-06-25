@@ -45,7 +45,7 @@ jobs:
           deploymentName: ${{ github.run_number }}
           resourceGroupName: ${{ secrets.AZURE_RG }}
           template: ./Healthtrackr.Activity/deploy/main.bicep
-          parameters: ./Healthtrackr.Activity/deploy/parameters.prod.json
+          parameters: ./Healthtrackr.Activity/deploy/parameters.prod.json sqlAdminLogin=${{ secrets.SQL_ADMIN }} sqlAdminPassword=${{ secrets.SQL_PASSWORD }}
           deploymentMode: Validate
 
   preview:
@@ -63,7 +63,7 @@ jobs:
         name: Run what-if
         with:
           inlineScript: |
-            az deployment group what-if --resource-group ${{ secrets.AZURE_RG }} --template-file ./Healthtrackr.Activity/deploy/main.bicep --parameters ./Healthtrackr.Activity/deploy/parameters.prod.json
+            az deployment group what-if --resource-group ${{ secrets.AZURE_RG }} --template-file ./Healthtrackr.Activity/deploy/main.bicep --parameters ./Healthtrackr.Activity/deploy/parameters.prod.json sqlAdminLogin=${{ secrets.SQL_ADMIN }} sqlAdminPassword=${{ secrets.SQL_PASSWORD }}
   deploy-infra:
     runs-on: ubuntu-latest
     environment: Production
@@ -82,8 +82,22 @@ jobs:
         with:
           resourceGroupName: ${{ secrets.AZURE_RG }}
           template: ./Healthtrackr.Activity/deploy/main.bicep
-          parameters: ./Healthtrackr.Activity/deploy/parameters.prod.json
+          parameters: ./Healthtrackr.Activity/deploy/parameters.prod.json sqlAdminLogin=${{ secrets.SQL_ADMIN }} sqlAdminPassword=${{ secrets.SQL_PASSWORD }}
           failOnStdErr: false
+
+  deploy-sql-tables:
+    needs: deploy-infra
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout Github Action'
+        uses: actions/checkout@v2
+      - name: 'Deploy Azure SQL Tables'
+        uses: azure/sql-action@v2
+        with:
+          connection-string: ${{ secrets.AZURE_SQL_CONNECTION }}
+          path: './Healthtrackr.Activity/src/Healthtrackr.Activity/Healthtrackr.Activity.Sql/Healthtrackr.Activity.Sql.sqlproj'
+          build-arguments: '-c Release'
+          action: 'publish'
 
   build-function:
     needs: deploy-infra
