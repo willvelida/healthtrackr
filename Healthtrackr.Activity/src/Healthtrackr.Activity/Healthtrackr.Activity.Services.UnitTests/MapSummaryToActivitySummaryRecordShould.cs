@@ -35,15 +35,12 @@ namespace Healthtrackr.Activity.Services.UnitTests
             // ASSERT
             using (new AssertionScope())
             {
-                expectedActivitySummaryRecord.CaloriesEstimationMu.Should().Be(summary.calorieEstimationMu);
-                expectedActivitySummaryRecord.CaloriesBMR.Should().Be(summary.caloriesBMR);
                 expectedActivitySummaryRecord.CaloriesOut.Should().Be(summary.caloriesOut);
                 expectedActivitySummaryRecord.ActivityCalories.Should().Be(summary.activityCalories);
+                expectedActivitySummaryRecord.Elevation.Should().Be(summary.elevation);
                 expectedActivitySummaryRecord.FairlyActiveMinutes.Should().Be(summary.fairlyActiveMinutes);
                 expectedActivitySummaryRecord.Floors.Should().Be(summary.floors);
                 expectedActivitySummaryRecord.LightlyActiveMinutes.Should().Be(summary.lightlyActiveMinutes);
-                expectedActivitySummaryRecord.MarginalCalories.Should().Be(summary.marginalCalories);
-                expectedActivitySummaryRecord.RestingHeartRate.Should().Be(summary.restingHeartRate);
                 expectedActivitySummaryRecord.SedentaryMinutes.Should().Be(summary.sedentaryMinutes);
                 expectedActivitySummaryRecord.Steps.Should().Be(summary.steps);
                 expectedActivitySummaryRecord.VeryActiveMinutes.Should().Be(summary.veryActiveMinutes);

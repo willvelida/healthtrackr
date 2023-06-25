@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Healthtrackr.Activity.Common.Models;
 using Healthtrackr.Activity.Services.Interfaces;
 using Microsoft.Azure.Functions.Worker;

@@ -22,8 +22,6 @@ GO;
 CREATE TABLE [dbo].[ActivitySummary]
 (
   [Id] INT IDENTITY NOT NULL PRIMARY KEY,
-  [CaloriesEstimationMu] INT NOT NULL,
-  [CaloriesBMR] INT NOT NULL,
   [CaloriesOut] INT NOT NULL,
   [ActivityCalories] INT NOT NULL,
   [Elevation] DECIMAL(10,5) NOT NULL,
@@ -31,7 +29,6 @@ CREATE TABLE [dbo].[ActivitySummary]
   [Floors] INT NOT NULL,
   [LightlyActiveMinutes] INT NOT NULL,
   [MarginalCalories] INT NOT NULL,
-  [RestingHeartRate] INT NOT NULL,
   [SedentaryMinutes] INT NOT NULL,
   [Steps] INT NOT NULL,
   [VeryActiveMinutes] INT NOT NULL,
