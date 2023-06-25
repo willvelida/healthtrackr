@@ -18,7 +18,7 @@ namespace Healthtrackr.Activity.Functions
 
         [Function(nameof(CreateActivitySummaries))]
         public async Task Run([CosmosDBTrigger(
-            databaseName: "HealthCheckrDB",
+            databaseName: "HealthTrackrDB",
             containerName: "Activity",
             Connection = "CosmosDbConnection",
             StartFromBeginning = true,
