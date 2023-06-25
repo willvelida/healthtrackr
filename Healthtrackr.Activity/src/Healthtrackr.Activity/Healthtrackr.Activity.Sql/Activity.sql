@@ -21,7 +21,7 @@ CREATE TABLE [dbo].[Activity]
   [Calories] INT NOT NULL,
   [Duration] INT NOT NULL,
   [Date] DATE NOT NULL,
-  [Time] DATETIME NOT NULL,
+  [Time] TIME NOT NULL,
   [Steps] INT NOT NULL,
 )
 GO;

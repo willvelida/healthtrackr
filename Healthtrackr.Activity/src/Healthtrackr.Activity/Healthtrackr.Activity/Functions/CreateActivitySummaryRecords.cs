@@ -5,18 +5,18 @@ using Microsoft.Extensions.Logging;
 
 namespace Healthtrackr.Activity.Functions
 {
-    public class CreateSummaryRecords
+    public class CreateActivitySummaryRecords
     {
         private readonly IActivityService _activityService;
-        private readonly ILogger<CreateSummaryRecords> _logger;
+        private readonly ILogger<CreateActivitySummaryRecords> _logger;
 
-        public CreateSummaryRecords(IActivityService activityService, ILogger<CreateSummaryRecords> logger)
+        public CreateActivitySummaryRecords(IActivityService activityService, ILogger<CreateActivitySummaryRecords> logger)
         {
             _activityService = activityService;
             _logger = logger;
         }
 
-        [Function(nameof(CreateSummaryRecords))]
+        [Function(nameof(CreateActivitySummaryRecords))]
         public async Task Run([CosmosDBTrigger(
             databaseName: "HealthTrackrDB",
             containerName: "Activity",
@@ -41,7 +41,7 @@ namespace Healthtrackr.Activity.Functions
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception thrown in {nameof(CreateSummaryRecords)}: {ex.Message}");
+                _logger.LogError($"Exception thrown in {nameof(CreateActivitySummaryRecords)}: {ex.Message}");
                 throw;
             }
         }
