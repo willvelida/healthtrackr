@@ -4,7 +4,7 @@ env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
   DOTNET_VERSION: 6.0.x
   OUTPUT_PATH: ${{ github.workspace }}/.output
-  COVERAGE_PATH: ${{ github.workspace }}/.coverage
+  COVERAGE_PATH: ${{ github.workspace }}/coverage
   COVERAGE_LOCATION: ${{ github.workspace }}/.coverage
 
 on:
@@ -124,12 +124,12 @@ jobs:
         run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --logger trx --results-directory ${{ env.COVERAGE_PATH }}
 
       - name: Copy Coverage to Predictable Location
-        run: cp ${{ env.COVERAGE_PATH }}/*/coverage.cobertura.xml ${{ env.COVERAGE_PATH }}/coverage.cobertura.xml
+        run: cp ${{ env.COVERAGE_PATH }}/*/coverage.cobertura.xml coverage/coverage.cobertura.xml
       
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: ${{ env.COVERAGE_PATH }}/coverage.cobertura.xml
+          filename: coverage/coverage.cobertura.xml
           badge: true
           fail_below_min: false
           format: markdown
@@ -138,6 +138,9 @@ jobs:
           indicators: true
           output: both
           thresholds: '60 80'
+
+      - name: Write to Job Summary
+        run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
       
       - name: Publish Functions
         run: dotnet publish ./Healthtrackr.Activity/Healthtrackr.Activity.csproj --configuration Release --output ${{ env.OUTPUT_PATH }}
