@@ -1,23 +1,22 @@
-﻿using AutoMapper;
-using Azure.Messaging.ServiceBus;
-using Healthtrackr.Activity.Common.FitbitResponses;
+﻿using Azure.Messaging.ServiceBus;
 using Healthtrackr.Activity.Common.Models;
 using Healthtrackr.Activity.Repository.Interfaces;
 using Healthtrackr.Activity.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using res = Healthtrackr.Activity.Common.FitbitResponses;
 
 namespace Healthtrackr.Activity.Services
 {
     public class ActivityService : IActivityService
     {
         private readonly ServiceBusClient _serviceBusClient;
-        private readonly IMapper _mapper;
+        private readonly IActivityMappers _mapper;
         private readonly IActivityRepository _activityRepository;
         private readonly ICosmosDbRepository _cosmosDbRepository;
         private readonly ILogger<ActivityService> _logger;
 
-        public ActivityService(ServiceBusClient serviceBusClient, ICosmosDbRepository cosmosDbRepository, ILogger<ActivityService> logger, IMapper mapper, IActivityRepository activityRepository)
+        public ActivityService(ServiceBusClient serviceBusClient, ICosmosDbRepository cosmosDbRepository, ILogger<ActivityService> logger, IActivityMappers mapper, IActivityRepository activityRepository)
         {
             _serviceBusClient = serviceBusClient;
             _cosmosDbRepository = cosmosDbRepository;
@@ -40,7 +39,7 @@ namespace Healthtrackr.Activity.Services
             return isDateValid;
         }
 
-        public async Task MapActivityEnvelopeAndSaveToDatabase(string date, ActivityResponse activityResponse)
+        public async Task MapActivityEnvelopeAndSaveToDatabase(string date, res.ActivityResponse activityResponse)
         {
             try
             {
@@ -74,8 +73,7 @@ namespace Healthtrackr.Activity.Services
 
                 foreach (var activity in activities)
                 {
-                    var activityRecord = new ActivityRecord();
-                    _mapper.Map(activity, activityRecord);
+                    var activityRecord = _mapper.MapActivityToActivityRecord(activity);
                     activityRecord.Date = activityEnvelope.Date;
                     await _activityRepository.AddActivityRecord(activityRecord);
                 }
@@ -99,7 +97,7 @@ namespace Healthtrackr.Activity.Services
                 }
 
                 var activitySummaryRecord = new ActivitySummaryRecord();
-                _mapper.Map(activitySummary, activitySummaryRecord);
+                activitySummaryRecord = _mapper.MapSummaryToActivitySummaryRecord(activitySummary);
                 activitySummaryRecord.Date = activityEnvelope.Date;
 
                 await _activityRepository.AddActivitySummaryRecord(activitySummaryRecord);

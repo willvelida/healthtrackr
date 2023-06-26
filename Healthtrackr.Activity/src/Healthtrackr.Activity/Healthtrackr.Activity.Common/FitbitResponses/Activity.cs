@@ -20,5 +20,6 @@ namespace Healthtrackr.Activity.Common.FitbitResponses
         public string startDate { get; set; }
         public string startTime { get; set; }
         public int steps { get; set; }
+        public double? distance { get; set; }
     }
 }

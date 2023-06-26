@@ -1,10 +1,9 @@
 using AutoFixture;
-using AutoMapper;
 using Azure.Messaging.ServiceBus;
 using FluentAssertions;
-using Healthtrackr.Activity.Common.FitbitResponses;
 using Healthtrackr.Activity.Common.Models;
 using Healthtrackr.Activity.Repository.Interfaces;
+using Healthtrackr.Activity.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
 using res = Healthtrackr.Activity.Common.FitbitResponses;
@@ -15,7 +14,7 @@ namespace Healthtrackr.Activity.Services.UnitTests
     {
         private Mock<ServiceBusClient> _serviceBusMock;
         private Mock<ServiceBusSender> _serviceBusSenderMock;
-        private Mock<IMapper> _mapperMock;
+        private Mock<IActivityMappers> _mapperMock;
         private Mock<IActivityRepository> _activityRepoMock;
         private Mock<ICosmosDbRepository> _cosmosRepoMock;
         private Mock<ILogger<ActivityService>> _loggerMock;
@@ -27,12 +26,9 @@ namespace Healthtrackr.Activity.Services.UnitTests
             _serviceBusMock = new Mock<ServiceBusClient>();
             _serviceBusSenderMock = new Mock<ServiceBusSender>();
             _cosmosRepoMock = new Mock<ICosmosDbRepository>();
-            _mapperMock = new Mock<IMapper>();
+            _mapperMock = new Mock<IActivityMappers>();
             _activityRepoMock = new Mock<IActivityRepository>();
             _loggerMock = new Mock<ILogger<ActivityService>>();
-
-            _mapperMock.Setup(x => x.Map(It.IsAny<res.Activity>(), It.IsAny<ActivityRecord>())).Verifiable();
-            _mapperMock.Setup(x => x.Map(It.IsAny<res.Summary>(), It.IsAny<ActivitySummaryRecord>())).Verifiable();
 
             _activityServiceSut = new ActivityService(_serviceBusMock.Object, _cosmosRepoMock.Object, _loggerMock.Object, _mapperMock.Object, _activityRepoMock.Object);
         }
@@ -42,7 +38,7 @@ namespace Healthtrackr.Activity.Services.UnitTests
         {
             // ARRANGE
             var fixture = new Fixture();
-            var activityResponse = fixture.Create<ActivityResponse>();
+            var activityResponse = fixture.Create<res.ActivityResponse>();
             var date = "2022-12-31";
 
             _cosmosRepoMock
@@ -62,7 +58,7 @@ namespace Healthtrackr.Activity.Services.UnitTests
         {
             // ARRANGE
             var fixture = new Fixture();
-            var activityResponse = fixture.Create<ActivityResponse>();
+            var activityResponse = fixture.Create<res.ActivityResponse>();
             var date = "2022-12-31";
 
             _cosmosRepoMock
@@ -83,7 +79,12 @@ namespace Healthtrackr.Activity.Services.UnitTests
             // ARRANGE
             var fixture = new Fixture();
             var activityEnvelope = fixture.Create<ActivityEnvelope>();
+            var testActivityRecord = fixture.Create<ActivityRecord>();
             activityEnvelope.Date = "2023-01-01";
+
+            _mapperMock
+                .Setup(x => x.MapActivityToActivityRecord(It.IsAny<res.Activity>()))
+                .Returns(testActivityRecord);
 
             _activityRepoMock
                 .Setup(x => x.AddActivityRecord(It.IsAny<ActivityRecord>()))
@@ -119,7 +120,12 @@ namespace Healthtrackr.Activity.Services.UnitTests
             // ARRANGE
             var fixture = new Fixture();
             var activityEnvelope = fixture.Create<ActivityEnvelope>();
+            var testActivityRecord = fixture.Create<ActivityRecord>();
             activityEnvelope.Date = "2023-01-01";
+
+            _mapperMock
+                .Setup(x => x.MapActivityToActivityRecord(It.IsAny<res.Activity>()))
+                .Returns(testActivityRecord);
 
             _activityRepoMock
                 .Setup(x => x.AddActivityRecord(It.IsAny<ActivityRecord>()))
@@ -139,8 +145,12 @@ namespace Healthtrackr.Activity.Services.UnitTests
             // ARRANGE
             var fixture = new Fixture();
             var activityEnvelope = fixture.Create<ActivityEnvelope>();
+            var testActivitySummary = new ActivitySummaryRecord();
             activityEnvelope.Date = "2023-01-01";
 
+            _mapperMock
+                .Setup(x => x.MapSummaryToActivitySummaryRecord(It.IsAny<res.Summary>()))
+                .Returns(testActivitySummary);
 
             _activityRepoMock
                 .Setup(x => x.AddActivitySummaryRecord(It.IsAny<ActivitySummaryRecord>()))
@@ -176,7 +186,12 @@ namespace Healthtrackr.Activity.Services.UnitTests
             // ARRANGE
             var fixture = new Fixture();
             var activityEnvelope = fixture.Create<ActivityEnvelope>();
+            var testActivitySummary = new ActivitySummaryRecord();
             activityEnvelope.Date = "2023-01-01";
+
+            _mapperMock
+                .Setup(x => x.MapSummaryToActivitySummaryRecord(It.IsAny<res.Summary>()))
+                .Returns(testActivitySummary);
 
             _activityRepoMock
                 .Setup(x => x.AddActivitySummaryRecord(It.IsAny<ActivitySummaryRecord>()))
@@ -195,7 +210,7 @@ namespace Healthtrackr.Activity.Services.UnitTests
         {
             // ARRANGE
             var fixture = new Fixture();
-            var activityResponse = fixture.Create<ActivityResponse>();
+            var activityResponse = fixture.Create<res.ActivityResponse>();
             var queueName = "activityqueue";
 
             _serviceBusMock
@@ -219,7 +234,7 @@ namespace Healthtrackr.Activity.Services.UnitTests
         {
             // ARRANGE
             var fixture = new Fixture();
-            var activityResponse = fixture.Create<ActivityResponse>();
+            var activityResponse = fixture.Create<res.ActivityResponse>();
             var queueName = "activityqueue";
 
             _serviceBusMock
