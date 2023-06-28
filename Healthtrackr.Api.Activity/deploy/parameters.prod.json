@@ -13,6 +13,9 @@
         },
         "containerRegistryName": {
             "value": "acrhealthtrackrprod"
+        },
+        "keyVaultName": {
+            "value": "kv-healthtrackr-prod"
         }
     }
 }
