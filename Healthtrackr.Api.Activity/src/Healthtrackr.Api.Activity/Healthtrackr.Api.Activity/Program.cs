@@ -13,11 +13,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.Configure<Settings>(builder.Configuration.GetSection("Healthtrackr"));
+builder.Configuration.AddEnvironmentVariables();
 builder.Configuration.AddAzureAppConfiguration(sp =>
 {
     sp.Connect(new Uri(builder.Configuration.GetValue<string>("AzureAppConfigEndpoint")), new DefaultAzureCredential());
 });
+builder.Services.Configure<Settings>(builder.Configuration.GetSection("Healthtrackr"));
 var cosmosClientOptions = new CosmosClientOptions
 {
     MaxRetryAttemptsOnRateLimitedRequests = 5,
