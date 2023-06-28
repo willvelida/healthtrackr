@@ -16,6 +16,9 @@ param containerAppName string
 @description('The container image that this Container App will use')
 param containerImage string = 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
 
+@description('The name of the key vault that we will create Access Policies for')
+param keyVaultName string
+
 @description('The time that the resource was last deployed')
 param lastDeployed string = utcNow()
 
@@ -36,6 +39,10 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-01-01-pr
 
 resource containerAppEnv 'Microsoft.App/managedEnvironments@2023-04-01-preview' existing = {
   name: containerAppEnvName
+}
+
+resource keyVault 'Microsoft.KeyVault/vaults@2021-11-01-preview' existing = {
+  name: keyVaultName
 }
 
 resource containerApp 'Microsoft.App/containerApps@2023-04-01-preview' = {
@@ -106,4 +113,23 @@ resource containerApp 'Microsoft.App/containerApps@2023-04-01-preview' = {
   identity: {
     type: 'SystemAssigned'
   } 
+}
+
+resource accessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2022-07-01' = {
+  name: 'add'
+  parent: keyVault
+  properties: {
+    accessPolicies: [
+      {
+        objectId: containerApp.identity.principalId
+        tenantId: containerApp.identity.tenantId
+        permissions: {
+          secrets: [
+            'get'
+            'list'
+          ]
+        }
+      }
+    ] 
+  }
 }
