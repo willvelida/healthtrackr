@@ -65,14 +65,10 @@ resource containerApp 'Microsoft.App/containerApps@2023-04-01-preview' = {
         {
           server: containerRegistry.properties.loginServer
           username: containerRegistry.listCredentials().username
-          passwordSecretRef: 'container-registry-password'
+          identity: 'system'
         }
       ]
       secrets: [
-        {
-          name: 'container-registry-password'
-          value: containerRegistry.listCredentials().passwords[0].value
-        }
       ]
     }
     template: {
