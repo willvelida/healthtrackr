@@ -20,7 +20,7 @@ jobs:
         runs-on: ubuntu-latest
         defaults:
             run:
-                working-directory: './src/Healthtrackr.Api.Activity'
+                working-directory: '/src/Healthtrackr.Api.Activity'
         steps:
           - name: 'Checkout GitHub Action'
             uses: actions/checkout@main
@@ -40,7 +40,7 @@ jobs:
         needs: run-unit-tests
         defaults:
             run:
-                working-directory: './src/Healthtrackr.Api.Activity'
+                working-directory: '/src/Healthtrackr.Api.Activity'
         steps:
             - uses: actions/checkout@v2
             - uses: azure/login@v1
