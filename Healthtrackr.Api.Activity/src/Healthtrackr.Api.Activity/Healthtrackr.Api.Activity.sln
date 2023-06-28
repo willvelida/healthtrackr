@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Api.Activity", "Healthtrackr.Api.Activity\Healthtrackr.Api.Activity.csproj", "{1686C005-0DDB-4BC5-AE6E-002B732DD43D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Api.Activity", "Healthtrackr.Api.Activity\Healthtrackr.Api.Activity.csproj", "{1686C005-0DDB-4BC5-AE6E-002B732DD43D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Api.Activity.Common", "Healthtrackr.Api.Activity.Common\Healthtrackr.Api.Activity.Common.csproj", "{B21D4FF2-F1FA-4408-B4CC-8AD146C4CB00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Api.Activity.Common", "Healthtrackr.Api.Activity.Common\Healthtrackr.Api.Activity.Common.csproj", "{B21D4FF2-F1FA-4408-B4CC-8AD146C4CB00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Api.Activity.Repository", "Healthtrackr.Api.Activity.Repository\Healthtrackr.Api.Activity.Repository.csproj", "{ABCF6717-1661-4BD8-AAD9-570526F2D2D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Api.Activity.Repository", "Healthtrackr.Api.Activity.Repository\Healthtrackr.Api.Activity.Repository.csproj", "{ABCF6717-1661-4BD8-AAD9-570526F2D2D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Api.Activity.Services", "Healthtrackr.Api.Activity.Services\Healthtrackr.Api.Activity.Services.csproj", "{13385378-FEC9-43C4-A2A0-CF3E56FEF281}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Api.Activity.Services", "Healthtrackr.Api.Activity.Services\Healthtrackr.Api.Activity.Services.csproj", "{13385378-FEC9-43C4-A2A0-CF3E56FEF281}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Api.Activity.Services.UnitTests", "Healthtrackr.Api.Activity.Services.UnitTests\Healthtrackr.Api.Activity.Services.UnitTests.csproj", "{1B585069-ED6E-4E63-9C92-9E86D2FC3814}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Api.Activity.Services.UnitTests", "Healthtrackr.Api.Activity.Services.UnitTests\Healthtrackr.Api.Activity.Services.UnitTests.csproj", "{1B585069-ED6E-4E63-9C92-9E86D2FC3814}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Api.Activity.IntegrationTests", "Healthtrackr.Api.Activity.IntegrationTests\Healthtrackr.Api.Activity.IntegrationTests.csproj", "{02967965-2873-4AC8-A0BA-B962C0175F0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{1B585069-ED6E-4E63-9C92-9E86D2FC3814}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B585069-ED6E-4E63-9C92-9E86D2FC3814}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B585069-ED6E-4E63-9C92-9E86D2FC3814}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02967965-2873-4AC8-A0BA-B962C0175F0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02967965-2873-4AC8-A0BA-B962C0175F0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02967965-2873-4AC8-A0BA-B962C0175F0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02967965-2873-4AC8-A0BA-B962C0175F0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
