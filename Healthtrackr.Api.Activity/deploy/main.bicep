@@ -29,6 +29,8 @@ var tags = {
   LastDeployed: lastDeployed
 }
 
+var acrPullRoleId = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d')
+
 resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
 }
@@ -131,5 +133,15 @@ resource accessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2022-07-01' = 
         }
       }
     ] 
+  }
+}
+
+resource acrPullRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(containerRegistry.id, containerApp.id, acrPullRoleId)
+  scope: containerRegistry
+  properties: {
+    principalId: containerApp.identity.principalId
+    roleDefinitionId: acrPullRoleId
+    principalType: 'ServicePrincipal'
   }
 }
