@@ -1,6 +1,18 @@
+using Azure.Identity;
 using FluentAssertions;
+using Healthtrackr.Api.Activity.Repository.Interfaces;
+using Healthtrackr.Api.Activity.Repository;
+using Healthtrackr.Api.Activity.Services.Interfaces;
+using Healthtrackr.Api.Activity.Services;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Healthtrackr.Api.Activity.Common;
 
 namespace Healthtrackr.Api.Activity.IntegrationTests
 {
@@ -9,9 +21,28 @@ namespace Healthtrackr.Api.Activity.IntegrationTests
         private readonly WebApplicationFactory<Program> _applicationFactory;
         private readonly HttpClient _httpClient;
 
-        public ActivityControllerShould(WebApplicationFactory<Program> applicationFactory)
+        public ActivityControllerShould()
         {
-            _applicationFactory = applicationFactory;
+            _applicationFactory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
+            {
+                IConfiguration configuration = new ConfigurationBuilder()
+                    .AddEnvironmentVariables()
+                    .AddAzureAppConfiguration(options =>
+                    {
+                        options.Connect(new Uri(Environment.GetEnvironmentVariable("AzureAppConfigEndpoint")), new DefaultAzureCredential());
+                    }).Build();
+                builder.ConfigureTestServices(services =>
+                {
+                    services.Configure<Settings>(configuration.GetSection("Healthtrackr"));
+                    var cosmosClient = new CosmosClient(Environment.GetEnvironmentVariable("CosmosDbEndpoint"), new DefaultAzureCredential());
+                    services.AddSingleton(cosmosClient);
+                    services.AddDbContext<ActivityContext>(opt => opt.UseSqlServer(Environment.GetEnvironmentVariable("SqlConnectionString")));
+                    services.AddSingleton<IActivityRepository, ActivityRepository>();
+                    services.AddSingleton<ICosmosDbRepository, CosmosDbRepository>();
+                    services.AddSingleton<IActivityService, ActivityService>();                  
+                })
+                .UseConfiguration(configuration);
+            });
             _httpClient = _applicationFactory.CreateClient();
         }
 
