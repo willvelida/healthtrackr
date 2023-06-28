@@ -8,7 +8,7 @@ param appInsightsName string
 param containerRegistryName string
 
 @description('The name of the Container App environment')
-param containerAppEnvironment string
+param containerAppEnvName string
 
 @description('The name of the Container App that will be deployed')
 param containerAppName string
@@ -35,7 +35,7 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-01-01-pr
 }
 
 resource containerAppEnv 'Microsoft.App/managedEnvironments@2023-04-01-preview' existing = {
-  name: containerAppEnvironment
+  name: containerAppEnvName
 }
 
 resource containerApp 'Microsoft.App/containerApps@2023-04-01-preview' = {
