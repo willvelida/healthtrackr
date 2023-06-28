@@ -211,20 +211,24 @@ jobs:
                 az containerapp revision copy -n healthtrackr-activity-api -g ${{ secrets.AZURE_RG }} -i ${{ steps.getacrserver.outputs.loginServer }}/healthcheckr-activity-api:${{ github.sha }}
                 az containerapp ingress traffic set -n healthtrackr-activity-api -g ${{ secrets.AZURE_RG }} --revision-weight ${{ steps.getcurrentrevisionname.outputs.currentRevision }}=100
               
-          - name: 'Get Blue Slot URL'
-            id: getbluesloturl
+          - name: 'Get Environment Variables'
+            id: getvariables
             run: |
               echo "Installing containerapp extension"
               az extension add -n containerapp --yes
               bluesloturl=$(az containerapp revision list -g ${{ secrets.AZURE_RG }} -n healthtrackr-activity-api --query 'reverse(sort_by([].{Revision:name,Replicas:properties.replicas,Active:properties.active,Created:properties.createdTime,FQDN:properties.fqdn}[?Active!=`false`], &Created))| [0].FQDN' -o tsv)
+              appConfigEndpoint=$(az appconfig list --resource-group ${{ secrets.AZURE_RG }} --query "[0].endpoint" -o tsv)
+              cosmosEndpoint=$(az cosmosdb list --resource-group ${{ secrets.AZURE_RG }} --query "[0].documentEndpoint" -o tsv)
               echo "::set-output name=bluesloturl::$bluesloturl"
+              echo "::set-output name=appConfigEndpoint::$appConfigEndpoint"
+              echo "::set-output name=cosmosEndpoint::$cosmosEndpoint"
 
           - name: 'Install Dependencies'
             run: dotnet restore
           - name: 'Build project'
             run: dotnet build --no-restore
           - name: Test
-            run: dotnet test ./Healthtrackr.Api.Activity.IntegrationTests/Healthtrackr.Api.Activity.IntegrationTests.csproj --no-build --verbosity normal  --logger trx --environment BLUE_SLOT_URL="https://${{ steps.getbluesloturl.outputs.bluesloturl }}"
+            run: dotnet test ./Healthtrackr.Api.Activity.IntegrationTests/Healthtrackr.Api.Activity.IntegrationTests.csproj --no-build --verbosity normal  --logger trx --environment BLUE_SLOT_URL="https://${{ steps.getvariables.outputs.bluesloturl }}" AzureAppConfigEndpoint=${{ steps.getvariables.outputs.appConfigEndpoint }} CosmosDbEndpoint=${{ steps.getvariables.outputs.cosmosEndpoint }} SqlConnectionString=${{ secrets.AZURE_SQL_CONNECTION}}
     
     promote-to-green:
         runs-on: ubuntu-latest
