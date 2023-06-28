@@ -1,5 +1,8 @@
 name: Healthtrackr.Api.Activity
 
+env:
+    DOTNET_VERSION: '6.0.x'
+
 on:
     push:
       branches:
@@ -13,8 +16,68 @@ permissions:
     contents: read
         
 jobs:
+    run-unit-tests:
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: './src/Healthtrackr.Api.Activity'
+        steps:
+          - name: 'Checkout GitHub Action'
+            uses: actions/checkout@main
+          - name: 'Setup dotnet'
+            uses: actions/setup-dotnet@v1
+            with:
+              dotnet-version: ${{ env.DOTNET_VERSION }}
+          - name: 'Install Dependencies'
+            run: dotnet restore
+          - name: 'Build project'
+            run: dotnet build --no-restore
+          - name: Test
+            run: dotnet test --no-build --verbosity normal  --logger trx 
+            
+    build-container-image:
+        runs-on: ubuntu-latest
+        needs: run-unit-tests
+        defaults:
+            run:
+                working-directory: './src/Healthtrackr.Api.Activity'
+        steps:
+            - uses: actions/checkout@v2
+            - uses: azure/login@v1
+              name: Sign in to Azure
+              with:
+                client-id: ${{ secrets.AZURE_CLIENT_ID }}
+                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+            
+            - name: Get ACR name
+              id: getacrname
+              run: |
+                acrName=$(az acr list --resource-group ${{ secrets.AZURE_RG }} --query "[0].name" -o tsv)
+                echo "::set-output name=acrName::$acrName"
+              
+            - name: Get ACR Credentials
+              id: getacrcreds
+              run: |
+                  loginServer=$(az acr list --resource-group ${{ secrets.AZURE_RG }} --query "[0].loginServer" -o tsv)
+                  loginName=$(az acr credential show -n ${{ steps.getacrname.outputs.acrName }} --resource-group ${{ secrets.AZURE_RG }} --query username -o tsv)
+                  password=$(az acr credential show -n ${{ steps.getacrname.outputs.acrName }} --resource-group ${{ secrets.AZURE_RG }} --query "passwords[0].value" -o tsv)
+                  echo "::set-output name=loginServer::$loginServer"
+                  echo "::set-output name=loginName::$loginName"
+                  echo "::set-output name=password::$password"
+            - name: 'Build and Push API Image to ACR'
+              uses: azure/docker-login@v1
+              with:
+                login-server: ${{ steps.getacrcreds.outputs.loginServer }}
+                username: ${{ steps.getacrname.outputs.acrName }}
+                password: ${{ steps.getacrcreds.outputs.password }}
+            - run: |
+                docker build . -t ${{ steps.getacrcreds.outputs.loginServer }}/healthcheckr-activity-api:${{ github.sha }}
+                docker push ${{ steps.getacrcreds.outputs.loginServer }}/healthcheckr-activity-api:${{ github.sha }}
+        
     lint:
         runs-on: ubuntu-latest
+        needs: build-container-image
         steps:
             - uses: actions/checkout@v2
             - name: Run Bicep Linter
@@ -77,30 +140,32 @@ jobs:
                 template: ./Healthtrackr.Api.Activity/deploy/main.bicep
                 parameters: ./Healthtrackr.Api.Activity/deploy/parameters.prod.json
                 failOnStdErr: false
-
-    deploy-api:
+    
+    deploy-api-image:
         runs-on: ubuntu-latest
-        needs: deploy-infra
+        needs: build-container-image
         steps:
-            - uses: actions/checkout@v2          
-            - uses: azure/login@v1
-              with:
-                client-id: ${{ secrets.AZURE_CLIENT_ID }}
-                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        - name: 'Checkout GitHub Action'
+          uses: actions/checkout@main
 
-            - name: Get ACR information
-              id: getacrinfo
-              run: |
-                acrName=$(az acr list --resource-group ${{ secrets.AZURE_RG }} --query "[0].name" -o tsv)
-                loginServer=$(az acr list --resource-group ${{ secrets.AZURE_RG }} --query "[0].loginServer" -o tsv)
-                echo "::set-output name=acrName::$acrName"
-                echo "::set-output name=loginServer::$loginServer"
-                
-            - uses: azure/container-apps-deploy-action@v1
-              name: Build and deploy Container App
-              with:
-                appSourcePath: './Healthtrackr.Api.Activity/src/Healthtrackr.Api.Activity'
-                acrName: ${{ steps.getacrinfo.outputs.acrName }}
-                containerAppName: 'healthtrackr-activity-api'
-                imageToBuild: ${{ steps.getacrinfo.outputs.loginServer }}/activity-api:${{ github.sha }}
+        - name: 'Login via Azure CLI'
+          uses: azure/login@v1
+          with:
+            client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+        - name: Get ACR Login Server
+          id: getacrserver
+          run: |
+            loginServer=$(az acr list --resource-group ${{ secrets.AZURE_RG }} --query "[0].loginServer" -o tsv)
+            echo "::set-output name=loginServer::$loginServer"
+
+        - name: 'Deploy Container App'
+          uses: Azure/cli@v1
+          with:
+            inlineScript: |
+                echo "Installing containerapp extension"
+                az extension add -n containerapp --yes
+                echo "Starting Deploying"
+                az containerapp update -n healthtrackr-activity-api -g ${{ secrets.AZURE_RG }} -i ${{ steps.getacrserver.outputs.loginServer }}/healthcheckr-activity-api:${{ github.sha }} --debug

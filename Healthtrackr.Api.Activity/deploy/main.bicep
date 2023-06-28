@@ -1,6 +1,9 @@
 @description('The location that we deploy our resources to. Default value is the location of the resource group')
 param location string = resourceGroup().location
 
+@description('The name of the App Config instance that this function will use')
+param appConfigName string
+
 @description('The name of the App Insights instance that this function will send logs to')
 param appInsightsName string
 
@@ -16,6 +19,9 @@ param containerAppName string
 @description('The container image that this Container App will use')
 param containerImage string = 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
 
+@description('The name of the Cosmos DB account that this Function will use')
+param cosmosDbAccountName string
+
 @description('The name of the key vault that we will create Access Policies for')
 param keyVaultName string
 
@@ -30,6 +36,11 @@ var tags = {
 }
 
 var acrPullRoleId = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d')
+var appConfigDataReaderRoleId = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '516239f1-63e1-4d78-a4de-a74fb236a071')
+
+resource appConfig 'Microsoft.AppConfiguration/configurationStores@2022-05-01' existing = {
+  name: appConfigName
+}
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
@@ -41,6 +52,10 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-01-01-pr
 
 resource containerAppEnv 'Microsoft.App/managedEnvironments@2023-04-01-preview' existing = {
   name: containerAppEnvName
+}
+
+resource cosmosDb 'Microsoft.DocumentDB/databaseAccounts@2022-02-15-preview' existing = {
+  name: cosmosDbAccountName
 }
 
 resource keyVault 'Microsoft.KeyVault/vaults@2021-11-01-preview' existing = {
@@ -84,6 +99,27 @@ resource containerApp 'Microsoft.App/containerApps@2023-04-01-preview' = {
             {
               name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
               value: appInsights.properties.InstrumentationKey
+            }
+            {
+              name: 'AzureAppConfigEndpoint'
+              value: appConfig.properties.endpoint
+            }
+            {
+              name: 'CosmosDbEndpoint'
+              value: cosmosDb.properties.documentEndpoint
+            }
+          ]
+          probes: [
+            {
+              type: 'Liveness'
+              httpGet: {
+                port: 80
+                path: '/healthz/liveness'
+              }
+              initialDelaySeconds: 15
+              periodSeconds: 30
+              failureThreshold: 3
+              timeoutSeconds: 1
             }
           ]
           resources: {
@@ -139,5 +175,23 @@ resource acrPullRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
     principalId: containerApp.identity.principalId
     roleDefinitionId: acrPullRoleId
     principalType: 'ServicePrincipal'
+  }
+}
+
+resource appConfigDataReaderRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(appConfig.id, containerApp.id, appConfigDataReaderRoleId)
+  scope: appConfig
+  properties: {
+    principalId: containerApp.identity.principalId
+    roleDefinitionId: appConfigDataReaderRoleId
+    principalType: 'ServicePrincipal'
+  }
+}
+
+module sqlRoleAssignment 'modules/sql-role-assignment.bicep' = {
+  name: 'sqlRoleAssignment'
+  params: {
+    containerAppPrincipalId: containerApp.identity.principalId
+    cosmosDbAccountName: cosmosDb.name
   }
 }

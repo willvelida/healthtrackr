@@ -5,6 +5,14 @@ VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Api.Activity", "Healthtrackr.Api.Activity\Healthtrackr.Api.Activity.csproj", "{1686C005-0DDB-4BC5-AE6E-002B732DD43D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Api.Activity.Common", "Healthtrackr.Api.Activity.Common\Healthtrackr.Api.Activity.Common.csproj", "{B21D4FF2-F1FA-4408-B4CC-8AD146C4CB00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Api.Activity.Repository", "Healthtrackr.Api.Activity.Repository\Healthtrackr.Api.Activity.Repository.csproj", "{ABCF6717-1661-4BD8-AAD9-570526F2D2D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Api.Activity.Services", "Healthtrackr.Api.Activity.Services\Healthtrackr.Api.Activity.Services.csproj", "{13385378-FEC9-43C4-A2A0-CF3E56FEF281}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Api.Activity.Services.UnitTests", "Healthtrackr.Api.Activity.Services.UnitTests\Healthtrackr.Api.Activity.Services.UnitTests.csproj", "{1B585069-ED6E-4E63-9C92-9E86D2FC3814}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +23,22 @@ Global
 		{1686C005-0DDB-4BC5-AE6E-002B732DD43D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1686C005-0DDB-4BC5-AE6E-002B732DD43D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1686C005-0DDB-4BC5-AE6E-002B732DD43D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B21D4FF2-F1FA-4408-B4CC-8AD146C4CB00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B21D4FF2-F1FA-4408-B4CC-8AD146C4CB00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B21D4FF2-F1FA-4408-B4CC-8AD146C4CB00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B21D4FF2-F1FA-4408-B4CC-8AD146C4CB00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABCF6717-1661-4BD8-AAD9-570526F2D2D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABCF6717-1661-4BD8-AAD9-570526F2D2D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABCF6717-1661-4BD8-AAD9-570526F2D2D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABCF6717-1661-4BD8-AAD9-570526F2D2D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13385378-FEC9-43C4-A2A0-CF3E56FEF281}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13385378-FEC9-43C4-A2A0-CF3E56FEF281}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13385378-FEC9-43C4-A2A0-CF3E56FEF281}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13385378-FEC9-43C4-A2A0-CF3E56FEF281}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B585069-ED6E-4E63-9C92-9E86D2FC3814}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B585069-ED6E-4E63-9C92-9E86D2FC3814}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B585069-ED6E-4E63-9C92-9E86D2FC3814}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B585069-ED6E-4E63-9C92-9E86D2FC3814}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
