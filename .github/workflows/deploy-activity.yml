@@ -1,4 +1,4 @@
-name: HealthCheckr.Activity
+name: Healthtrackr.Activity
 
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
