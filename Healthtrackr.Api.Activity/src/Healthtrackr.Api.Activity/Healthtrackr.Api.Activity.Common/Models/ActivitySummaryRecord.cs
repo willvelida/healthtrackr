@@ -3,10 +3,10 @@
     public class ActivitySummaryRecord
     {
         public int Id { get; set; }
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
         public int CaloriesBurned { get; set; }
         public int Steps { get; set; }
-        public double Distance { get; set; }
+        public decimal Distance { get; set; }
         public int Floors { get; set; }
         public int MinutesSedentary { get; set; }
         public int MinutesLightlyActive { get; set; }

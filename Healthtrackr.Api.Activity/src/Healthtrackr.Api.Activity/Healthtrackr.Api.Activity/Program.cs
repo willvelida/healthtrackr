@@ -6,18 +6,18 @@ using Healthtrackr.Api.Activity.Services;
 using Healthtrackr.Api.Activity.Services.Interfaces;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Azure.Cosmos;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddEnvironmentVariables();
-builder.Configuration.AddAzureAppConfiguration(sp =>
-{
-    sp.Connect(new Uri(builder.Configuration.GetValue<string>("AzureAppConfigEndpoint")), new DefaultAzureCredential());
-});
 // Add services to the container.
 
 builder.Services.AddControllers();
 builder.Services.Configure<Settings>(builder.Configuration.GetSection("Healthtrackr"));
+builder.Configuration.AddAzureAppConfiguration(sp =>
+{
+    sp.Connect(new Uri(builder.Configuration.GetValue<string>("AzureAppConfigEndpoint")), new DefaultAzureCredential());
+});
 var cosmosClientOptions = new CosmosClientOptions
 {
     MaxRetryAttemptsOnRateLimitedRequests = 5,
@@ -27,6 +27,8 @@ var cosmosClient = new CosmosClient(builder.Configuration.GetValue<string>("Cosm
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSingleton(cosmosClient);
+builder.Services.AddDbContext<ActivityContext>(opt => opt.UseSqlServer(builder.Configuration.GetValue<string>("SqlConnectionString")));
+builder.Services.AddTransient<IActivityRepository, ActivityRepository>();
 builder.Services.AddTransient<ICosmosDbRepository, CosmosDbRepository>();
 builder.Services.AddTransient<IActivityService, ActivityService>();
 builder.Services.AddEndpointsApiExplorer();

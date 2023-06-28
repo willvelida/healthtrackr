@@ -11,6 +11,7 @@ namespace Healthtrackr.Api.Activity.Services.UnitTests
     public class ActivityServiceShould
     {
         private Mock<ICosmosDbRepository> _cosmosRepoMock;
+        private Mock<IActivityRepository> _activityRepoMock;
         private Mock<ILogger<ActivityService>> _loggerMock;
 
         private ActivityService _activityServiceSut;
@@ -18,9 +19,10 @@ namespace Healthtrackr.Api.Activity.Services.UnitTests
         public ActivityServiceShould()
         {
             _cosmosRepoMock = new Mock<ICosmosDbRepository>();
+            _activityRepoMock = new Mock<IActivityRepository>();
             _loggerMock = new Mock<ILogger<ActivityService>>();
 
-            _activityServiceSut = new ActivityService(_cosmosRepoMock.Object, _loggerMock.Object);
+            _activityServiceSut = new ActivityService(_cosmosRepoMock.Object, _activityRepoMock.Object, _loggerMock.Object);
         }
 
         [Fact]
@@ -63,6 +65,90 @@ namespace Healthtrackr.Api.Activity.Services.UnitTests
             // ASSERT
             await activityServiceAction.Should().ThrowAsync<Exception>().WithMessage("Mock Exception");
             _loggerMock.VerifyLog(logger => logger.LogError("Exception thrown in GetActivityEnvelope: Mock Exception"));
+        }
+
+        [Fact]
+        public async Task ReturnActivityRecordsWhenCallingGetActivityRecordsByDate()
+        {
+            // ARRANGE
+            var testDate = DateTime.Now.ToString("yyyy-MM-dd");
+            var fixture = new Fixture();
+            var recordList = fixture.Build<ActivityRecord>().CreateMany(1).ToList();
+            recordList[0].Date = DateTime.Parse(testDate);
+
+            _activityRepoMock
+                .Setup(x => x.GetActivityRecordsByDate(It.IsAny<string>()))
+                .ReturnsAsync(recordList);
+
+            // ACT
+            var activityRecords = await _activityServiceSut.GetActivityRecords(testDate);
+
+            // ASSERT
+            using (new AssertionScope())
+            {
+                activityRecords.Should().NotBeNull();
+                activityRecords[0].Date.Should().Be(DateTime.Parse(testDate));
+            }
+        }
+
+        [Fact]
+        public async Task ThrowExceptionWhenGetActivityRecordsFail()
+        {
+            // ARRANGE
+            var testDate = DateTime.Now.ToString("yyyy-MM-dd");
+
+            _activityRepoMock
+                .Setup(x => x.GetActivityRecordsByDate(It.IsAny<string>()))
+                .ThrowsAsync(new Exception("Mock Exception"));
+
+            // ACT
+            Func<Task> activityServiceAction = async () => await _activityServiceSut.GetActivityRecords(testDate);
+
+            // ASSERT
+            await activityServiceAction.Should().ThrowAsync<Exception>().WithMessage("Mock Exception");
+            _loggerMock.VerifyLog(logger => logger.LogError("Exception thrown in GetActivityRecords: Mock Exception"));
+        }
+
+        [Fact]
+        public async Task ReturnActivitySummaryWhenCallingGetActivitySummary()
+        {
+            // ARRANGE
+            var testDate = DateTime.Now.ToString("yyyy-MM-dd");
+            var fixture = new Fixture();
+            var activitySummary = fixture.Create<ActivitySummaryRecord>();
+            activitySummary.Date = DateTime.Parse(testDate);
+
+            _activityRepoMock
+                .Setup(x => x.GetActivitySummaryRecordByDate(It.IsAny<string>()))
+                .ReturnsAsync(activitySummary);
+
+            // ACT
+            var activitySummaryRecord = await _activityServiceSut.GetActivitySummary(testDate);
+
+            // ASSERT
+            using (new AssertionScope())
+            {
+                activitySummaryRecord.Should().NotBeNull();
+                activitySummaryRecord.Date.Should().Be(DateTime.Parse(testDate));
+            }
+        }
+
+        [Fact]
+        public async Task ThrowExceptionWhenGetActivitySummaryFail()
+        {
+            // ARRANGE
+            var testDate = DateTime.Now.ToString("yyyy-MM-dd");
+
+            _activityRepoMock
+                .Setup(x => x.GetActivitySummaryRecordByDate(It.IsAny<string>()))
+                .ThrowsAsync(new Exception("Mock Exception"));
+
+            // ACT
+            Func<Task> activityServiceAction = async () => await _activityServiceSut.GetActivitySummary(testDate);
+
+            // ASSERT
+            await activityServiceAction.Should().ThrowAsync<Exception>().WithMessage("Mock Exception");
+            _loggerMock.VerifyLog(logger => logger.LogError("Exception thrown in GetActivitySummary: Mock Exception"));
         }
 
         [Theory]

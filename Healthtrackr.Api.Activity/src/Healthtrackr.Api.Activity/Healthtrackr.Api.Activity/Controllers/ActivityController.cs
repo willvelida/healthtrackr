@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Healthtrackr.Api.Activity.Controllers
 {
-    [Route("api/activity")]
     [ApiController]
     public class ActivityController : ControllerBase
     {
@@ -17,6 +16,7 @@ namespace Healthtrackr.Api.Activity.Controllers
             _logger = logger;
         }
 
+        [Route("api/activity")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActivityEnvelope))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -29,7 +29,7 @@ namespace Healthtrackr.Api.Activity.Controllers
                 var isDateValid = _activityService.IsDateValid(date);
                 if (isDateValid is false)
                 {
-                    return BadRequest($"Date in format: {date} is invalid. Please provide a date in the formate yyyy-MM-dd");
+                    return BadRequest($"Date in format: {date} is invalid. Please provide a date in the format yyyy-MM-dd");
                 }
 
                 var activityEnvelope = await _activityService.GetActivityEnvelope(date);
@@ -43,6 +43,63 @@ namespace Healthtrackr.Api.Activity.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Exception thrown in {nameof(GetActivityEnvelopeByDate)}: {ex.Message}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [Route("api/activitysummary")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActivitySummaryRecord))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetActivitySummaryRecordByDate(string date)
+        {
+            try
+            {
+                var isDateValid = _activityService.IsDateValid(date);
+                if (isDateValid is false)
+                {
+                    return BadRequest($"Date in format: {date} is invalid. Please provide a date in the format yyyy-MM-dd");
+                }
+
+                var activitySummaryRecord = await _activityService.GetActivitySummary(date);
+                if (activitySummaryRecord is null)
+                {
+                    return NotFound($"No activity summary found for {date}");
+                }
+
+                return Ok(activitySummaryRecord);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception thrown in {nameof(GetActivitySummaryRecordByDate)}: {ex.Message}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [Route("api/activities")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActivityRecord))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetActivitiesByDate(string date)
+        {
+            try
+            {
+                var isDateValid = _activityService.IsDateValid(date);
+                if (isDateValid is false)
+                {
+                    return BadRequest($"Date in format: {date} is invalid. Please provide a date in the format yyyy-MM-dd");
+                }
+
+                var activityRecords = await _activityService.GetActivityRecords(date);
+
+                return Ok(activityRecords);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception thrown in {nameof(GetActivitiesByDate)}: {ex.Message}");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }

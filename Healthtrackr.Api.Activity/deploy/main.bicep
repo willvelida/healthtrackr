@@ -17,13 +17,25 @@ param containerAppEnvName string
 param containerAppName string
 
 @description('The container image that this Container App will use')
-param containerImage string = 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
+param containerImage string
 
 @description('The name of the Cosmos DB account that this Function will use')
 param cosmosDbAccountName string
 
 @description('The name of the key vault that we will create Access Policies for')
 param keyVaultName string
+
+@description('The name of the SQL Server that this function app will use')
+param sqlServerName string
+
+@description('The name of the SQL database')
+param sqlDatabaseName string
+
+@description('The administrator username of the SQL logical server')
+param sqlAdminLogin string
+
+@description('The administrator password of the SQL logical server')
+param sqlAdminPassword string
 
 @description('The time that the resource was last deployed')
 param lastDeployed string = utcNow()
@@ -60,6 +72,10 @@ resource cosmosDb 'Microsoft.DocumentDB/databaseAccounts@2022-02-15-preview' exi
 
 resource keyVault 'Microsoft.KeyVault/vaults@2021-11-01-preview' existing = {
   name: keyVaultName
+}
+
+resource sqlServer 'Microsoft.Sql/servers@2022-05-01-preview' existing = {
+  name: sqlServerName
 }
 
 resource containerApp 'Microsoft.App/containerApps@2023-04-01-preview' = {
@@ -107,6 +123,10 @@ resource containerApp 'Microsoft.App/containerApps@2023-04-01-preview' = {
             {
               name: 'CosmosDbEndpoint'
               value: cosmosDb.properties.documentEndpoint
+            }
+            {
+              name: 'SqlConnectionString'
+              value: 'Server=tcp:${sqlServer.name}${environment().suffixes.sqlServerHostname},1433;Initial Catalog=${sqlDatabaseName};Persist Security Info=False;User ID=${sqlAdminLogin};Password=${sqlAdminPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
             }
           ]
           probes: [

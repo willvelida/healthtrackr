@@ -8,11 +8,13 @@ namespace Healthtrackr.Api.Activity.Services
     public class ActivityService : IActivityService
     {
         private readonly ICosmosDbRepository _cosmosDbRepository;
+        private readonly IActivityRepository _activityRepository;
         private readonly ILogger<ActivityService> _logger;
 
-        public ActivityService(ICosmosDbRepository cosmosDbRepository, ILogger<ActivityService> logger)
+        public ActivityService(ICosmosDbRepository cosmosDbRepository, IActivityRepository activityRepository, ILogger<ActivityService> logger)
         {
             _cosmosDbRepository = cosmosDbRepository;
+            _activityRepository = activityRepository;
             _logger = logger;
         }
 
@@ -27,6 +29,32 @@ namespace Healthtrackr.Api.Activity.Services
             catch (Exception ex)
             {
                 _logger.LogError($"Exception thrown in {nameof(GetActivityEnvelope)}: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<List<ActivityRecord>> GetActivityRecords(string date)
+        {
+            try
+            {
+                return await _activityRepository.GetActivityRecordsByDate(date);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception thrown in {nameof(GetActivityRecords)}: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<ActivitySummaryRecord> GetActivitySummary(string date)
+        {
+            try
+            {
+                return await _activityRepository.GetActivitySummaryRecordByDate(date);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception thrown in {nameof(GetActivitySummary)}: {ex.Message}");
                 throw;
             }
         }

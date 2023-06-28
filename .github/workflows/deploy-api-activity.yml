@@ -94,6 +94,14 @@ jobs:
                 client-id: ${{ secrets.AZURE_CLIENT_ID }}
                 tenant-id: ${{ secrets.AZURE_TENANT_ID }}
                 subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+            - name: Get existing activity api image
+              id: getimages
+              run: |
+                  echo "Installing containerapp extension"
+                  az extension add -n containerapp --yes
+                  apiImage=$(az containerapp show --name healthtrackr-activity-api --resource-group ${{ secrets.AZURE_RG }} --query "properties.template.containers[0].image" -o tsv)  
+                  echo "::set-output name=apiImage::$apiImage"
                   
             - uses: azure/arm-deploy@v1
               name: Run preflight validation
@@ -101,7 +109,7 @@ jobs:
                 deploymentName: ${{ github.run_number }}
                 resourceGroupName: ${{ secrets.AZURE_RG }}
                 template: ./Healthtrackr.Api.Activity/deploy/main.bicep
-                parameters: ./Healthtrackr.Api.Activity/deploy/parameters.prod.json
+                parameters: ./Healthtrackr.Api.Activity/deploy/parameters.prod.json sqlAdminLogin=${{ secrets.SQL_ADMIN }} sqlAdminPassword=${{ secrets.SQL_PASSWORD }} containerImage=${{ steps.getimages.outputs.apiImage }}
                 deploymentMode: Validate
             
     preview:
@@ -115,11 +123,20 @@ jobs:
                 client-id: ${{ secrets.AZURE_CLIENT_ID }}
                 tenant-id: ${{ secrets.AZURE_TENANT_ID }}
                 subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+            - name: Get existing activity api image
+              id: getimages
+              run: |
+                  echo "Installing containerapp extension"
+                  az extension add -n containerapp --yes
+                  apiImage=$(az containerapp show --name healthtrackr-activity-api --resource-group ${{ secrets.AZURE_RG }} --query "properties.template.containers[0].image" -o tsv)  
+                  echo "::set-output name=apiImage::$apiImage"
+
             - uses: Azure/cli@v1
               name: Run what-if
               with:
                 inlineScript: |
-                    az deployment group what-if --resource-group ${{ secrets.AZURE_RG }} --template-file ./Healthtrackr.Api.Activity/deploy/main.bicep --parameters ./Healthtrackr.Api.Activity/deploy/parameters.prod.json
+                    az deployment group what-if --resource-group ${{ secrets.AZURE_RG }} --template-file ./Healthtrackr.Api.Activity/deploy/main.bicep --parameters ./Healthtrackr.Api.Activity/deploy/parameters.prod.json sqlAdminLogin=${{ secrets.SQL_ADMIN }} sqlAdminPassword=${{ secrets.SQL_PASSWORD }} containerImage=${{ steps.getimages.outputs.apiImage }}
 
     deploy-infra:
         runs-on: ubuntu-latest
@@ -132,13 +149,21 @@ jobs:
                 client-id: ${{ secrets.AZURE_CLIENT_ID }}
                 tenant-id: ${{ secrets.AZURE_TENANT_ID }}
                 subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+            - name: Get existing activity api image
+              id: getimages
+              run: |
+                  echo "Installing containerapp extension"
+                  az extension add -n containerapp --yes
+                  apiImage=$(az containerapp show --name healthtrackr-activity-api --resource-group ${{ secrets.AZURE_RG }} --query "properties.template.containers[0].image" -o tsv)  
+                  echo "::set-output name=apiImage::$apiImage"
                     
             - name: Deploy Bicep File
               uses: azure/arm-deploy@v1
               with:
                 resourceGroupName: ${{ secrets.AZURE_RG }}
                 template: ./Healthtrackr.Api.Activity/deploy/main.bicep
-                parameters: ./Healthtrackr.Api.Activity/deploy/parameters.prod.json
+                parameters: ./Healthtrackr.Api.Activity/deploy/parameters.prod.json sqlAdminLogin=${{ secrets.SQL_ADMIN }} sqlAdminPassword=${{ secrets.SQL_PASSWORD }} containerImage=${{ steps.getimages.outputs.apiImage }}
                 failOnStdErr: false
     
     deploy-api-image:
