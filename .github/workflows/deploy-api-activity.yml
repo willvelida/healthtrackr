@@ -143,7 +143,7 @@ jobs:
     
     deploy-api-image:
         runs-on: ubuntu-latest
-        needs: build-container-image
+        needs: deploy-infra
         steps:
         - name: 'Checkout GitHub Action'
           uses: actions/checkout@main
