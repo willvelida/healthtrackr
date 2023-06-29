@@ -23,26 +23,7 @@ namespace Healthtrackr.Api.Activity.IntegrationTests
 
         public ActivityControllerShould()
         {
-            _applicationFactory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
-            {
-                IConfiguration configuration = new ConfigurationBuilder()
-                    .AddEnvironmentVariables()
-                    .AddAzureAppConfiguration(options =>
-                    {
-                        options.Connect(new Uri(Environment.GetEnvironmentVariable("AzureAppConfigEndpoint")), new DefaultAzureCredential());
-                    }).Build();
-                builder.ConfigureTestServices(services =>
-                {
-                    services.Configure<Settings>(configuration.GetSection("Healthtrackr"));
-                    var cosmosClient = new CosmosClient(Environment.GetEnvironmentVariable("CosmosDbEndpoint"), new DefaultAzureCredential());
-                    services.AddSingleton(cosmosClient);
-                    services.AddDbContext<ActivityContext>(opt => opt.UseSqlServer(Environment.GetEnvironmentVariable("SqlConnectionString")));
-                    services.AddSingleton<IActivityRepository, ActivityRepository>();
-                    services.AddSingleton<ICosmosDbRepository, CosmosDbRepository>();
-                    services.AddSingleton<IActivityService, ActivityService>();                  
-                })
-                .UseConfiguration(configuration);
-            });
+            _applicationFactory = new WebApplicationFactory<Program>();
             _httpClient = _applicationFactory.CreateClient();
         }
 
