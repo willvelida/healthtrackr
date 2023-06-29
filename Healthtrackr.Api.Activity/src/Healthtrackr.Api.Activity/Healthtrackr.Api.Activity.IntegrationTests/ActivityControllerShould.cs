@@ -20,9 +20,9 @@ namespace Healthtrackr.Api.Activity.IntegrationTests
     {
         private readonly WebApplicationFactory<Program> _applicationFactory;
 
-        public ActivityControllerShould()
+        public ActivityControllerShould(WebApplicationFactory<Program> applicationFactory)
         {
-            _applicationFactory = new WebApplicationFactory<Program>();
+            _applicationFactory = applicationFactory;
         }
 
         [Fact]
