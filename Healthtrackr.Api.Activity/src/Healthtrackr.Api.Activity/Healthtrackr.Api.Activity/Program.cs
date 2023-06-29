@@ -16,7 +16,7 @@ builder.Services.AddControllers();
 builder.Configuration.AddEnvironmentVariables();
 builder.Configuration.AddAzureAppConfiguration(sp =>
 {
-    sp.Connect(new Uri(Environment.GetEnvironmentVariable("AzureAppConfigEndpoint")), new DefaultAzureCredential());
+    sp.Connect(new Uri(builder.Configuration.GetValue<string>("AzureAppConfigEndpoint")), new DefaultAzureCredential());
 });
 builder.Services.Configure<Settings>(builder.Configuration.GetSection("Healthtrackr"));
 var cosmosClientOptions = new CosmosClientOptions
