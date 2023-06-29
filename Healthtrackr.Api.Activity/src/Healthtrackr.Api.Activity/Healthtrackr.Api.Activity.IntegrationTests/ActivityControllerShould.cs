@@ -48,7 +48,7 @@ namespace Healthtrackr.Api.Activity.IntegrationTests
             var client = _applicationFactory.CreateClient();
 
             // ACT
-            var response = await client.GetAsync(Environment.GetEnvironmentVariable("BlUE_SLOT_URL") + $"/api/activity?date=${testDate}");
+            var response = await client.GetAsync(Environment.GetEnvironmentVariable("BlUE_SLOT_URL") + $"/api/activity?date={testDate}");
 
             // ASSERT
             response.Should().HaveStatusCode(HttpStatusCode.NotFound);
@@ -63,7 +63,7 @@ namespace Healthtrackr.Api.Activity.IntegrationTests
             var client = _applicationFactory.CreateClient();
 
             // ACT
-            var response = await client.GetAsync(Environment.GetEnvironmentVariable("BlUE_SLOT_URL") + $"/api/activity?date=${testDate}");
+            var response = await client.GetAsync(Environment.GetEnvironmentVariable("BlUE_SLOT_URL") + $"/api/activity?date={testDate}");
 
             // ASSERT
             response.Should().HaveStatusCode(HttpStatusCode.OK);
@@ -77,7 +77,7 @@ namespace Healthtrackr.Api.Activity.IntegrationTests
             var client = _applicationFactory.CreateClient();
 
             // ACT
-            var response = await client.GetAsync(Environment.GetEnvironmentVariable("BlUE_SLOT_URL") + $"/api/activitysummary?date=${testDate}");
+            var response = await client.GetAsync(Environment.GetEnvironmentVariable("BlUE_SLOT_URL") + $"/api/activitysummary?date={testDate}");
 
             // ASSERT
             response.Should().HaveStatusCode(HttpStatusCode.BadRequest);
@@ -92,7 +92,7 @@ namespace Healthtrackr.Api.Activity.IntegrationTests
             var client = _applicationFactory.CreateClient();
 
             // ACT
-            var response = await client.GetAsync(Environment.GetEnvironmentVariable("BlUE_SLOT_URL") + $"/api/activitysummary?date=${testDate}");
+            var response = await client.GetAsync(Environment.GetEnvironmentVariable("BlUE_SLOT_URL") + $"/api/activitysummary?date={testDate}");
 
             // ASSERT
             response.Should().HaveStatusCode(HttpStatusCode.NotFound);
@@ -107,7 +107,7 @@ namespace Healthtrackr.Api.Activity.IntegrationTests
             var client = _applicationFactory.CreateClient();
 
             // ACT
-            var response = await client.GetAsync(Environment.GetEnvironmentVariable("BlUE_SLOT_URL") + $"/api/activitysummary?date=${testDate}");
+            var response = await client.GetAsync(Environment.GetEnvironmentVariable("BlUE_SLOT_URL") + $"/api/activitysummary?date={testDate}");
 
             // ASSERT
             response.Should().HaveStatusCode(HttpStatusCode.OK);
@@ -121,7 +121,7 @@ namespace Healthtrackr.Api.Activity.IntegrationTests
             var client = _applicationFactory.CreateClient();
 
             // ACT
-            var response = await client.GetAsync(Environment.GetEnvironmentVariable("BlUE_SLOT_URL") + $"/api/activities?date=${testDate}");
+            var response = await client.GetAsync(Environment.GetEnvironmentVariable("BlUE_SLOT_URL") + $"/api/activities?date={testDate}");
 
             // ASSERT
             response.Should().HaveStatusCode(HttpStatusCode.BadRequest);
@@ -136,7 +136,7 @@ namespace Healthtrackr.Api.Activity.IntegrationTests
             var client = _applicationFactory.CreateClient();
 
             // ACT
-            var response = await client.GetAsync(Environment.GetEnvironmentVariable("BlUE_SLOT_URL") + $"/api/activities?date=${testDate}");
+            var response = await client.GetAsync(Environment.GetEnvironmentVariable("BlUE_SLOT_URL") + $"/api/activities?date={testDate}");
 
             // ASSERT
             response.Should().HaveStatusCode(HttpStatusCode.OK);
