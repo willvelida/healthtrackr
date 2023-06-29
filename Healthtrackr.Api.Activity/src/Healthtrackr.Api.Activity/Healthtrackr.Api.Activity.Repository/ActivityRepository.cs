@@ -2,11 +2,6 @@
 using Healthtrackr.Api.Activity.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Healthtrackr.Api.Activity.Repository
 {
@@ -38,7 +33,7 @@ namespace Healthtrackr.Api.Activity.Repository
         {
             try
             {
-                return await _activityContext.ActivitySummary.FirstOrDefaultAsync(a  => a.Date == DateTime.Parse(date));
+                return await _activityContext.ActivitySummary.FirstOrDefaultAsync(a => a.Date == DateTime.Parse(date));
             }
             catch (Exception ex)
             {

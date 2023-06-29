@@ -1,26 +1,13 @@
-using Azure.Identity;
 using FluentAssertions;
-using Healthtrackr.Api.Activity.Repository.Interfaces;
-using Healthtrackr.Api.Activity.Repository;
-using Healthtrackr.Api.Activity.Services.Interfaces;
-using Healthtrackr.Api.Activity.Services;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Azure.Cosmos;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using System.Net;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Healthtrackr.Api.Activity.Common;
 
 namespace Healthtrackr.Api.Activity.IntegrationTests
 {
-    public class ActivityControllerShould : IClassFixture<WebApplicationFactory<Program>>
+    public class ActivityControllerShould : IClassFixture<CustomWebApplicationFactory<Program>>
     {
-        private readonly WebApplicationFactory<Program> _applicationFactory;
+        private readonly CustomWebApplicationFactory<Program> _applicationFactory;
 
-        public ActivityControllerShould(WebApplicationFactory<Program> applicationFactory)
+        public ActivityControllerShould(CustomWebApplicationFactory<Program> applicationFactory)
         {
             _applicationFactory = applicationFactory;
         }
