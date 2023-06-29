@@ -228,7 +228,7 @@ jobs:
           - name: 'Build project'
             run: dotnet build --no-restore
           - name: Test
-            run: dotnet test ./Healthtrackr.Api.Activity.IntegrationTests/Healthtrackr.Api.Activity.IntegrationTests.csproj --no-build --verbosity normal  --logger trx --environment "BLUE_SLOT_URL=https://${{ steps.getvariables.outputs.bluesloturl }},AzureAppConfigEndpoint=${{ steps.getvariables.outputs.appConfigEndpoint }},CosmosDbEndpoint=${{ steps.getvariables.outputs.cosmosEndpoint }},SqlConnectionString=${{ secrets.AZURE_SQL_CONNECTION}}"
+            run: dotnet test ./Healthtrackr.Api.Activity.IntegrationTests/Healthtrackr.Api.Activity.IntegrationTests.csproj --no-build --verbosity normal  --logger trx --environment "BLUE_SLOT_URL=https://${{ steps.getvariables.outputs.bluesloturl }}"
     
     promote-to-green:
         runs-on: ubuntu-latest
