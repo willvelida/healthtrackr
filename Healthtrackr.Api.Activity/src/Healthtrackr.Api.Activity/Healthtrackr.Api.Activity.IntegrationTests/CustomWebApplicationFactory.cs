@@ -38,6 +38,7 @@ namespace Healthtrackr.Api.Activity.IntegrationTests
                 services.AddSingleton<ICosmosDbRepository, CosmosDbRepository>();
                 services.AddSingleton<IActivityService, ActivityService>();
             });
+            builder.UseEnvironment("Development");
         }
     }
 }
