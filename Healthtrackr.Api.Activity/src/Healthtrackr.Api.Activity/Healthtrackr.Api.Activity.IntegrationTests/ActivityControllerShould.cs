@@ -1,13 +1,14 @@
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
 
 namespace Healthtrackr.Api.Activity.IntegrationTests
 {
-    public class ActivityControllerShould : IClassFixture<CustomWebApplicationFactory<Program>>
+    public class ActivityControllerShould : IClassFixture<WebApplicationFactory<Program>>
     {
-        private readonly CustomWebApplicationFactory<Program> _applicationFactory;
+        private readonly WebApplicationFactory<Program> _applicationFactory;
 
-        public ActivityControllerShould(CustomWebApplicationFactory<Program> applicationFactory)
+        public ActivityControllerShould(WebApplicationFactory<Program> applicationFactory)
         {
             _applicationFactory = applicationFactory;
         }
