@@ -3,6 +3,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Healthtrackr.Api.Activity.Common.Models;
 using Healthtrackr.Api.Activity.Repository.Interfaces;
+using Healthtrackr.Api.Activity.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -12,6 +13,7 @@ namespace Healthtrackr.Api.Activity.Services.UnitTests
     {
         private Mock<ICosmosDbRepository> _cosmosRepoMock;
         private Mock<IActivityRepository> _activityRepoMock;
+        private Mock<IUriService> _uriServiceMock;
         private Mock<ILogger<ActivityService>> _loggerMock;
 
         private ActivityService _activityServiceSut;
@@ -20,9 +22,10 @@ namespace Healthtrackr.Api.Activity.Services.UnitTests
         {
             _cosmosRepoMock = new Mock<ICosmosDbRepository>();
             _activityRepoMock = new Mock<IActivityRepository>();
+            _uriServiceMock = new Mock<IUriService>();
             _loggerMock = new Mock<ILogger<ActivityService>>();
 
-            _activityServiceSut = new ActivityService(_cosmosRepoMock.Object, _activityRepoMock.Object, _loggerMock.Object);
+            _activityServiceSut = new ActivityService(_cosmosRepoMock.Object, _activityRepoMock.Object, _uriServiceMock.Object, _loggerMock.Object);
         }
 
         [Fact]

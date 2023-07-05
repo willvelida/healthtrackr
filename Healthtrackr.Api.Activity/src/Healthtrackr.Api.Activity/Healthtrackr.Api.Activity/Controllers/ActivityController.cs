@@ -1,6 +1,8 @@
-﻿using Healthtrackr.Api.Activity.Common.Models;
+﻿using Healthtrackr.Api.Activity.Common.Filters;
+using Healthtrackr.Api.Activity.Common.Models;
 using Healthtrackr.Api.Activity.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.InteropServices;
 
 namespace Healthtrackr.Api.Activity.Controllers
 {
@@ -14,6 +16,42 @@ namespace Healthtrackr.Api.Activity.Controllers
         {
             _activityService = activityService;
             _logger = logger;
+        }
+
+        [Route("api/activityrecords")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ActivityRecord>))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetAllActivityRecords([FromQuery] PaginationFilter paginationFilter)
+        {
+            try
+            {
+                var activityRecords = await _activityService.GetAllActivityRecords(paginationFilter, Request.Path.Value);
+                return Ok(activityRecords);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception thrown in {nameof(GetAllActivityRecords)}: {ex.Message}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [Route("api/activitysummaryrecords")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ActivitySummaryRecord>))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetAllActivitySummaryRecords([FromQuery] PaginationFilter paginationFilter)
+        {
+            try
+            {
+                var activitySummaryRecords = await _activityService.GetAllActivitySummaryRecords(paginationFilter, Request.Path.Value);
+                return Ok(activitySummaryRecords);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception thrown in {nameof(GetAllActivitySummaryRecords)}: {ex.Message}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [Route("api/activity")]

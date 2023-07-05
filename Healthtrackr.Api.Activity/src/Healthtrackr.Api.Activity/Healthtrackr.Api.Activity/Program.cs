@@ -32,6 +32,14 @@ builder.Services.AddDbContext<ActivityContext>(opt => opt.UseSqlServer(builder.C
 builder.Services.AddTransient<IActivityRepository, ActivityRepository>();
 builder.Services.AddTransient<ICosmosDbRepository, CosmosDbRepository>();
 builder.Services.AddTransient<IActivityService, ActivityService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<IUriService>(u =>
+{
+    var accessor = u.GetRequiredService<IHttpContextAccessor>();
+    var request = accessor.HttpContext.Request;
+    var uri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+    return new UriService(uri);
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
