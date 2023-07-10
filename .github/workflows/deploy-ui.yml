@@ -1,0 +1,80 @@
+name: Healthtrackr.UI
+
+on:
+    push:
+      branches:
+        - main
+      paths:
+        - Healthtrackr.UI/**
+    workflow_dispatch:
+
+permissions:
+    id-token: write
+    contents: read
+
+jobs:
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Run Bicep Linter
+              run: az bicep build --file ./Healthtrackr.UI/deploy/main.bicep
+
+    validate:
+        needs: lint
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: azure/login@v1
+              name: Sign in to Azure
+              with:
+                client-id: ${{ secrets.AZURE_CLIENT_ID }}
+                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+                  
+            - uses: azure/arm-deploy@v1
+              name: Run preflight validation
+              with:
+                deploymentName: ${{ github.run_number }}
+                resourceGroupName: ${{ secrets.AZURE_RG }}
+                template: ./Healthtrackr.UI/deploy/main.bicep
+                parameters: ./Healthtrackr.UI/deploy/parameters.prod.json
+                deploymentMode: Validate
+            
+    preview:
+        runs-on: ubuntu-latest
+        needs: validate
+        steps:
+            - uses: actions/checkout@v2
+            - uses: azure/login@v1
+              name: Sign in to Azure
+              with:
+                client-id: ${{ secrets.AZURE_CLIENT_ID }}
+                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+            - uses: Azure/cli@v1
+              name: Run what-if
+              with:
+                inlineScript: |
+                    az deployment group what-if --resource-group ${{ secrets.AZURE_RG }} --template-file ./Healthtrackr.UI/deploy/main.bicep --parameters ./Healthtrackr.UI/deploy/parameters.prod.json
+
+    deploy-infra:
+        runs-on: ubuntu-latest
+        environment: Production
+        needs: preview
+        steps:
+            - uses: actions/checkout@v2          
+            - uses: azure/login@v1
+              with:
+                client-id: ${{ secrets.AZURE_CLIENT_ID }}
+                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+                    
+            - name: Deploy Bicep File
+              uses: azure/arm-deploy@v1
+              with:
+                resourceGroupName: ${{ secrets.AZURE_RG }}
+                template: ./Healthtrackr.UI/deploy/main.bicep
+                parameters: ./Healthtrackr.UI/deploy/parameters.prod.json
+                failOnStdErr: false 
