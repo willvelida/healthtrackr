@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Healthtrackr.Api.Activity.Common.Wrappers
+﻿namespace Healthtrackr.Api.Activity.Common.Wrappers
 {
     public class PagedResponse<T> : Response<T>
     {

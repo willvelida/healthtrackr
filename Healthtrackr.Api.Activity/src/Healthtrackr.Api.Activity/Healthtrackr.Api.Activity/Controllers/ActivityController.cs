@@ -2,7 +2,6 @@
 using Healthtrackr.Api.Activity.Common.Models;
 using Healthtrackr.Api.Activity.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.InteropServices;
 
 namespace Healthtrackr.Api.Activity.Controllers
 {

@@ -1,5 +1,4 @@
-﻿using Healthtrackr.Api.Activity.Common;
-using Healthtrackr.Api.Activity.Common.Filters;
+﻿using Healthtrackr.Api.Activity.Common.Filters;
 using Healthtrackr.Api.Activity.Common.Models;
 using Healthtrackr.Api.Activity.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;

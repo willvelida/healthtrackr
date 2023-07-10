@@ -1,5 +1,4 @@
-﻿using Healthtrackr.Api.Activity.Common;
-using Healthtrackr.Api.Activity.Common.Filters;
+﻿using Healthtrackr.Api.Activity.Common.Filters;
 using Healthtrackr.Api.Activity.Common.Models;
 
 namespace Healthtrackr.Api.Activity.Repository.Interfaces

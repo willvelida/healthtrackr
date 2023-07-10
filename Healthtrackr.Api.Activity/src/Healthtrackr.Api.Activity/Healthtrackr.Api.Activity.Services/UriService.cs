@@ -1,11 +1,6 @@
 ﻿using Healthtrackr.Api.Activity.Common.Filters;
 using Healthtrackr.Api.Activity.Services.Interfaces;
 using Microsoft.AspNetCore.WebUtilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Healthtrackr.Api.Activity.Services
 {

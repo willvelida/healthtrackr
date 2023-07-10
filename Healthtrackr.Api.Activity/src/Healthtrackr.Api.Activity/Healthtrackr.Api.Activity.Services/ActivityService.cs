@@ -1,10 +1,8 @@
-﻿using Azure;
-using Healthtrackr.Api.Activity.Common.Filters;
+﻿using Healthtrackr.Api.Activity.Common.Filters;
 using Healthtrackr.Api.Activity.Common.Models;
 using Healthtrackr.Api.Activity.Common.Wrappers;
 using Healthtrackr.Api.Activity.Repository.Interfaces;
 using Healthtrackr.Api.Activity.Services.Interfaces;
-using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
 
 namespace Healthtrackr.Api.Activity.Services
