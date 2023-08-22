@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Api.Activity.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Api.Activity.Services.UnitTests", "Healthtrackr.Api.Activity.Services.UnitTests\Healthtrackr.Api.Activity.Services.UnitTests.csproj", "{1B585069-ED6E-4E63-9C92-9E86D2FC3814}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Api.Activity.IntegrationTests", "Healthtrackr.Api.Activity.IntegrationTests\Healthtrackr.Api.Activity.IntegrationTests.csproj", "{02967965-2873-4AC8-A0BA-B962C0175F0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Api.Activity.IntegrationTests", "Healthtrackr.Api.Activity.IntegrationTests\Healthtrackr.Api.Activity.IntegrationTests.csproj", "{02967965-2873-4AC8-A0BA-B962C0175F0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
