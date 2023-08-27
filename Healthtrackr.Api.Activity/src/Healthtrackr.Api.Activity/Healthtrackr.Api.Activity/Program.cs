@@ -35,6 +35,11 @@ builder.Services.AddTransient<IActivityService, ActivityService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(policy =>
+{
+    policy.AddPolicy("CorsPolicy", opt =>
+        opt.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().WithExposedHeaders("X-Pagination"));
+});
 builder.Services.AddHealthChecks();
 
 var app = builder.Build();
