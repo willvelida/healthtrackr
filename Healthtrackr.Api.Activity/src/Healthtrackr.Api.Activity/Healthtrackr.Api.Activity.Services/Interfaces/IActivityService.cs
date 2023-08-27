@@ -1,6 +1,6 @@
-﻿using Healthtrackr.Api.Activity.Common.Filters;
-using Healthtrackr.Api.Activity.Common.Models;
-using Healthtrackr.Api.Activity.Common.Wrappers;
+﻿using Healthtrackr.Api.Activity.Common.Models;
+using Healthtrackr.Api.Activity.Common.Paging;
+using Healthtrackr.Api.Activity.Common.RequestFilters;
 
 namespace Healthtrackr.Api.Activity.Services.Interfaces
 {
@@ -9,8 +9,8 @@ namespace Healthtrackr.Api.Activity.Services.Interfaces
         Task<ActivityEnvelope> GetActivityEnvelope(string date);
         Task<ActivitySummaryRecord> GetActivitySummary(string date);
         Task<List<ActivityRecord>> GetActivityRecords(string date);
-        Task<PagedResponse<List<ActivityRecord>>> GetAllActivityRecords(PaginationFilter paginationFilter, string route);
-        Task<PagedResponse<List<ActivitySummaryRecord>>> GetAllActivitySummaryRecords(PaginationFilter paginationFilter, string route);
+        Task<PagedList<ActivityRecord>> GetAllActivityRecords(ActivityParameters activityParameters);
+        Task<PagedList<ActivitySummaryRecord>> GetAllActivitySummaryRecords(ActivityParameters activityParameters);
         bool IsDateValid(string date);
     }
 }

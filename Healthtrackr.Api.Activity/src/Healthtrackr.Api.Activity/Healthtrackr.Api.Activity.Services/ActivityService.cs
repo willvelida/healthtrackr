@@ -1,6 +1,6 @@
-﻿using Healthtrackr.Api.Activity.Common.Filters;
-using Healthtrackr.Api.Activity.Common.Models;
-using Healthtrackr.Api.Activity.Common.Wrappers;
+﻿using Healthtrackr.Api.Activity.Common.Models;
+using Healthtrackr.Api.Activity.Common.Paging;
+using Healthtrackr.Api.Activity.Common.RequestFilters;
 using Healthtrackr.Api.Activity.Repository.Interfaces;
 using Healthtrackr.Api.Activity.Services.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -11,14 +11,12 @@ namespace Healthtrackr.Api.Activity.Services
     {
         private readonly ICosmosDbRepository _cosmosDbRepository;
         private readonly IActivityRepository _activityRepository;
-        private readonly IUriService _uriService;
         private readonly ILogger<ActivityService> _logger;
 
-        public ActivityService(ICosmosDbRepository cosmosDbRepository, IActivityRepository activityRepository, IUriService uriService, ILogger<ActivityService> logger)
+        public ActivityService(ICosmosDbRepository cosmosDbRepository, IActivityRepository activityRepository, ILogger<ActivityService> logger)
         {
             _cosmosDbRepository = cosmosDbRepository;
             _activityRepository = activityRepository;
-            _uriService = uriService;
             _logger = logger;
         }
 
@@ -63,28 +61,11 @@ namespace Healthtrackr.Api.Activity.Services
             }
         }
 
-        public async Task<PagedResponse<List<ActivityRecord>>> GetAllActivityRecords(PaginationFilter paginationFilter, string route)
+        public async Task<PagedList<ActivityRecord>> GetAllActivityRecords(ActivityParameters activityParameters)
         {
             try
             {
-                var activityRecords = await _activityRepository.GetActivityRecords(paginationFilter);
-                var totalRecords = await _activityRepository.GetActivityRecordsCount();
-                var response = new PagedResponse<List<ActivityRecord>>(activityRecords, paginationFilter.PageNumber, paginationFilter.PageSize);
-                var totalPages = ((double)totalRecords / (double)paginationFilter.PageSize);
-                int roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
-                response.NextPage =
-                    paginationFilter.PageNumber >= 1 && paginationFilter.PageNumber < roundedTotalPages
-                    ? _uriService.GetPageUri(new PaginationFilter(paginationFilter.PageNumber + 1, paginationFilter.PageSize), route)
-                    : null;
-                response.PreviousPage =
-                    paginationFilter.PageNumber - 1 >= 1 && paginationFilter.PageNumber <= roundedTotalPages
-                    ? _uriService.GetPageUri(new PaginationFilter(paginationFilter.PageNumber - 1, paginationFilter.PageSize), route)
-                    : null;
-                response.FirstPage = _uriService.GetPageUri(new PaginationFilter(1, paginationFilter.PageSize), route);
-                response.LastPage = _uriService.GetPageUri(new PaginationFilter(roundedTotalPages, paginationFilter.PageSize), route);
-                response.TotalPages = roundedTotalPages;
-                response.TotalRecords = totalRecords;
-                return response;
+                return await _activityRepository.GetActivityRecords(activityParameters);
             }
             catch (Exception ex)
             {
@@ -93,28 +74,11 @@ namespace Healthtrackr.Api.Activity.Services
             }
         }
 
-        public async Task<PagedResponse<List<ActivitySummaryRecord>>> GetAllActivitySummaryRecords(PaginationFilter paginationFilter, string route)
+        public async Task<PagedList<ActivitySummaryRecord>> GetAllActivitySummaryRecords(ActivityParameters activityParameters)
         {
             try
             {
-                var activitySummaryRecords = await _activityRepository.GetActivitySummaryRecords(paginationFilter);
-                var totalRecords = await _activityRepository.GetActivitySummaryRecordCount();
-                var response = new PagedResponse<List<ActivitySummaryRecord>>(activitySummaryRecords, paginationFilter.PageNumber, paginationFilter.PageSize);
-                var totalPages = ((double)totalRecords / (double)paginationFilter.PageSize);
-                int roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
-                response.NextPage =
-                    paginationFilter.PageNumber >= 1 && paginationFilter.PageNumber < roundedTotalPages
-                    ? _uriService.GetPageUri(new PaginationFilter(paginationFilter.PageNumber + 1, paginationFilter.PageSize), route)
-                    : null;
-                response.PreviousPage =
-                    paginationFilter.PageNumber - 1 >= 1 && paginationFilter.PageNumber <= roundedTotalPages
-                    ? _uriService.GetPageUri(new PaginationFilter(paginationFilter.PageNumber - 1, paginationFilter.PageSize), route)
-                    : null;
-                response.FirstPage = _uriService.GetPageUri(new PaginationFilter(1, paginationFilter.PageSize), route);
-                response.LastPage = _uriService.GetPageUri(new PaginationFilter(roundedTotalPages, paginationFilter.PageSize), route);
-                response.TotalPages = roundedTotalPages;
-                response.TotalRecords = totalRecords;
-                return response;
+                return await _activityRepository.GetActivitySummaryRecords(activityParameters);
             }
             catch (Exception ex)
             {

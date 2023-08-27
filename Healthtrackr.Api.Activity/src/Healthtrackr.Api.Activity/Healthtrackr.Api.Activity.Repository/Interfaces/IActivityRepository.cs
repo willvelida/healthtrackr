@@ -1,5 +1,6 @@
-﻿using Healthtrackr.Api.Activity.Common.Filters;
-using Healthtrackr.Api.Activity.Common.Models;
+﻿using Healthtrackr.Api.Activity.Common.Models;
+using Healthtrackr.Api.Activity.Common.Paging;
+using Healthtrackr.Api.Activity.Common.RequestFilters;
 
 namespace Healthtrackr.Api.Activity.Repository.Interfaces
 {
@@ -7,9 +8,9 @@ namespace Healthtrackr.Api.Activity.Repository.Interfaces
     {
         Task<List<ActivityRecord>> GetActivityRecordsByDate(string date);
         Task<ActivitySummaryRecord> GetActivitySummaryRecordByDate(string date);
-        Task<List<ActivityRecord>> GetActivityRecords(PaginationFilter paginationFilter);
+        Task<PagedList<ActivityRecord>> GetActivityRecords(ActivityParameters activityParameters);
         Task<int> GetActivityRecordsCount();
-        Task<List<ActivitySummaryRecord>> GetActivitySummaryRecords(PaginationFilter paginationFilter);
+        Task<PagedList<ActivitySummaryRecord>> GetActivitySummaryRecords(ActivityParameters activityParameters);
         Task<int> GetActivitySummaryRecordCount();
     }
 }

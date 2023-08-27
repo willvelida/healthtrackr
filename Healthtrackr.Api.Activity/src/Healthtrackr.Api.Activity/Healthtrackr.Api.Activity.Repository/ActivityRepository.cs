@@ -1,5 +1,6 @@
-﻿using Healthtrackr.Api.Activity.Common.Filters;
-using Healthtrackr.Api.Activity.Common.Models;
+﻿using Healthtrackr.Api.Activity.Common.Models;
+using Healthtrackr.Api.Activity.Common.Paging;
+using Healthtrackr.Api.Activity.Common.RequestFilters;
 using Healthtrackr.Api.Activity.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -17,15 +18,14 @@ namespace Healthtrackr.Api.Activity.Repository
             _logger = logger;
         }
 
-        public async Task<List<ActivityRecord>> GetActivityRecords(PaginationFilter paginationFilter)
+        public async Task<PagedList<ActivityRecord>> GetActivityRecords(ActivityParameters activityParameters)
         {
             try
             {
-                return await _activityContext.Activity
-                    .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
-                    .Take(paginationFilter.PageSize)
-                    .OrderByDescending(d => d.Date)
-                    .ToListAsync();
+                var activities = await _activityContext.Activity.ToListAsync();
+
+                return PagedList<ActivityRecord>
+                    .ToPagedList(activities, activityParameters.PageNumber, activityParameters.PageSize);
             }
             catch (Exception ex)
             {
@@ -86,15 +86,15 @@ namespace Healthtrackr.Api.Activity.Repository
             }
         }
 
-        public async Task<List<ActivitySummaryRecord>> GetActivitySummaryRecords(PaginationFilter paginationFilter)
+        public async Task<PagedList<ActivitySummaryRecord>> GetActivitySummaryRecords(ActivityParameters activityParameters)
         {
             try
             {
-                return await _activityContext.ActivitySummary
-                    .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
-                    .Take(paginationFilter.PageSize)
-                    .OrderByDescending(d => d.Date)
+                var activitySummaries = await _activityContext.ActivitySummary
                     .ToListAsync();
+
+                return PagedList<ActivitySummaryRecord>
+                    .ToPagedList(activitySummaries, activityParameters.PageNumber, activityParameters.PageSize);
             }
             catch (Exception ex)
             {

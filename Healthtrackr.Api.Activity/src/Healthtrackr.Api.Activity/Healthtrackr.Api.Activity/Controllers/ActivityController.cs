@@ -1,7 +1,8 @@
-﻿using Healthtrackr.Api.Activity.Common.Filters;
-using Healthtrackr.Api.Activity.Common.Models;
+﻿using Healthtrackr.Api.Activity.Common.Models;
+using Healthtrackr.Api.Activity.Common.RequestFilters;
 using Healthtrackr.Api.Activity.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace Healthtrackr.Api.Activity.Controllers
 {
@@ -21,11 +22,14 @@ namespace Healthtrackr.Api.Activity.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ActivityRecord>))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllActivityRecords([FromQuery] PaginationFilter paginationFilter)
+        public async Task<IActionResult> GetAllActivityRecords([FromQuery] ActivityParameters activityParameters)
         {
             try
             {
-                var activityRecords = await _activityService.GetAllActivityRecords(paginationFilter, Request.Path.Value);
+                var activityRecords = await _activityService.GetAllActivityRecords(activityParameters);
+
+                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(activityRecords.Metadata));
+
                 return Ok(activityRecords);
             }
             catch (Exception ex)
