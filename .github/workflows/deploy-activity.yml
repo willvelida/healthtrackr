@@ -45,7 +45,7 @@ jobs:
           deploymentName: ${{ github.run_number }}
           resourceGroupName: ${{ secrets.AZURE_RG }}
           template: ./Healthtrackr.Activity/deploy/main.bicep
-          parameters: ./Healthtrackr.Activity/deploy/parameters.prod.bicepparam sqlAdminLogin=${{ secrets.SQL_ADMIN }} sqlAdminPassword=${{ secrets.SQL_PASSWORD }}
+          parameters: ./Healthtrackr.Activity/deploy/parameters.prod.json sqlAdminLogin=${{ secrets.SQL_ADMIN }} sqlAdminPassword=${{ secrets.SQL_PASSWORD }}
           deploymentMode: Validate
 
   preview:
@@ -63,7 +63,7 @@ jobs:
         name: Run what-if
         with:
           inlineScript: |
-            az deployment group what-if --resource-group ${{ secrets.AZURE_RG }} --template-file ./Healthtrackr.Activity/deploy/main.bicep --parameters ./Healthtrackr.Activity/deploy/parameters.prod.bicepparam sqlAdminLogin=${{ secrets.SQL_ADMIN }} sqlAdminPassword=${{ secrets.SQL_PASSWORD }}
+            az deployment group what-if --resource-group ${{ secrets.AZURE_RG }} --template-file ./Healthtrackr.Activity/deploy/main.bicep --parameters ./Healthtrackr.Activity/deploy/parameters.prod.json sqlAdminLogin=${{ secrets.SQL_ADMIN }} sqlAdminPassword=${{ secrets.SQL_PASSWORD }}
   deploy-infra:
     runs-on: ubuntu-latest
     environment: Production
@@ -82,7 +82,7 @@ jobs:
         with:
           resourceGroupName: ${{ secrets.AZURE_RG }}
           template: ./Healthtrackr.Activity/deploy/main.bicep
-          parameters: ./Healthtrackr.Activity/deploy/parameters.prod.bicepparam sqlAdminLogin=${{ secrets.SQL_ADMIN }} sqlAdminPassword=${{ secrets.SQL_PASSWORD }}
+          parameters: ./Healthtrackr.Activity/deploy/parameters.prod.json sqlAdminLogin=${{ secrets.SQL_ADMIN }} sqlAdminPassword=${{ secrets.SQL_PASSWORD }}
           failOnStdErr: false
 
   deploy-sql-tables:
