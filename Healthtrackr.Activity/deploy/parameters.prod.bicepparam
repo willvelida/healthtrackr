@@ -1,0 +1,13 @@
+using 'main.bicep'
+
+param appConfigName = 'appconfig-healthtrackr-prod'
+param appServicePlanName = 'asp-healthtrackr-prod'
+param appInsightsName = 'ai-healthtrackr-prod'
+param keyVaultName = 'kv-healthtrackr-prod'
+param storageAccountName = 'htactivitystorprod'
+param functionAppName = 'func-htactivity-prod'
+param cosmosDatabaseName = 'cosmosdb-healthtrackr-prod'
+param cosmosDbAccountName = 'HealthTrackrDB'
+param serviceBusNamespace = 'sb-healthtrackr-prod'
+param sqlServerName = 'sql-healthtrackr-prod'
+param sqlDatabaseName = 'HealthTrackrDB'
