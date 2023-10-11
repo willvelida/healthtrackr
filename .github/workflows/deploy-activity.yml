@@ -143,7 +143,7 @@ jobs:
         run: dotnet publish ./Healthtrackr.Activity/Healthtrackr.Activity.csproj --configuration Release --output ${{ env.OUTPUT_PATH }}
               
       - name: Package Functions
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
             name: activity-function
             path: ${{ env.OUTPUT_PATH }}
