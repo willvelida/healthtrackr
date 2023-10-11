@@ -156,7 +156,7 @@ jobs:
             
       steps:
        - name: Download Artifact
-         uses: actions/download-artifact@v1
+         uses: actions/download-artifact@v3
          with:
             name: activity-function
             path: ${{ env.OUTPUT_PATH }}
