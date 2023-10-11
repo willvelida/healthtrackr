@@ -2,7 +2,7 @@ name: Healthtrackr.Activity
 
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
-  DOTNET_VERSION: 6.0.x
+  DOTNET_VERSION: 7.0.x
   OUTPUT_PATH: ${{ github.workspace }}/.output
   COVERAGE_PATH: ${{ github.workspace }}/coverage
   COVERAGE_LOCATION: ${{ github.workspace }}/.coverage
