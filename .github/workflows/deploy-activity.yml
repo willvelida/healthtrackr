@@ -23,7 +23,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Run Bicep Linter
         run: az bicep build --file ./Healthtrackr.Activity/deploy/main.bicep
 
@@ -31,7 +31,7 @@ jobs:
     needs: lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: azure/login@v1
         name: Sign in to Azure
         with:
@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: validate
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: azure/login@v1
         name: Sign in to Azure
         with:
@@ -69,7 +69,7 @@ jobs:
     environment: Production
     needs: preview
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - uses: azure/login@v1
         with:
@@ -90,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout Github Action'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: 'Deploy Azure SQL Tables'
         uses: azure/sql-action@v2
         with:
@@ -107,7 +107,7 @@ jobs:
         working-directory: './Healthtrackr.Activity/src/Healthtrackr.Activity/'
     steps:
       - name: 'Checkout GitHub Action'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
               
       - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
         uses: actions/setup-dotnet@v3
