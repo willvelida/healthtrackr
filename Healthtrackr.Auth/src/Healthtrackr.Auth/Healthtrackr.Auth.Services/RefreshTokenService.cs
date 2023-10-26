@@ -1,4 +1,4 @@
-﻿using Healthtracker.Auth.Repository.Interfaces;
+﻿using Healthtrackr.Auth.Repository.Interfaces;
 using Healthtrackr.Auth.Common.Models;
 using Healthtrackr.Auth.Services.Interfaces;
 using Microsoft.Extensions.Logging;

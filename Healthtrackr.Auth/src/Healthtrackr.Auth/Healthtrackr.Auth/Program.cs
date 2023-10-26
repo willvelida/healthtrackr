@@ -1,7 +1,7 @@
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-using Healthtracker.Auth.Repository;
-using Healthtracker.Auth.Repository.Interfaces;
+using Healthtrackr.Auth.Repository;
+using Healthtrackr.Auth.Repository.Interfaces;
 using Healthtrackr.Auth.Services;
 using Healthtrackr.Auth.Services.Interfaces;
 using Microsoft.Extensions.Configuration;

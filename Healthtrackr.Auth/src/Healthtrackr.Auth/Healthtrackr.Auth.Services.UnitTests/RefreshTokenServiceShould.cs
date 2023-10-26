@@ -1,6 +1,6 @@
 using AutoFixture;
 using FluentAssertions;
-using Healthtracker.Auth.Repository.Interfaces;
+using Healthtrackr.Auth.Repository.Interfaces;
 using Healthtrackr.Auth.Common.Models;
 using Microsoft.Extensions.Logging;
 using Moq;

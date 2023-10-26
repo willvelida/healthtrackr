@@ -1,6 +1,6 @@
 ﻿using Azure.Security.KeyVault.Secrets;
 
-namespace Healthtracker.Auth.Repository.Interfaces
+namespace Healthtrackr.Auth.Repository.Interfaces
 {
     public interface IKeyVaultRepository
     {

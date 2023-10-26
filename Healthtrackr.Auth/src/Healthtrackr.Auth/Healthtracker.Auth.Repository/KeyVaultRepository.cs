@@ -1,8 +1,8 @@
 ﻿using Azure.Security.KeyVault.Secrets;
-using Healthtracker.Auth.Repository.Interfaces;
+using Healthtrackr.Auth.Repository.Interfaces;
 using Microsoft.Extensions.Logging;
 
-namespace Healthtracker.Auth.Repository
+namespace Healthtrackr.Auth.Repository
 {
     public class KeyVaultRepository : IKeyVaultRepository
     {

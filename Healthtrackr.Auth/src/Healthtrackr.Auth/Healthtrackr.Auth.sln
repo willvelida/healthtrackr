@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Auth", "Healthtrackr.Auth\Healthtrackr.Auth.csproj", "{7622201E-14D8-45EA-9890-32DF0C8A474B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Auth", "Healthtrackr.Auth\Healthtrackr.Auth.csproj", "{7622201E-14D8-45EA-9890-32DF0C8A474B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Auth.Common", "Healthtrackr.Auth.Common\Healthtrackr.Auth.Common.csproj", "{DC455D0A-9403-4698-9970-C48472DE8AAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Auth.Common", "Healthtrackr.Auth.Common\Healthtrackr.Auth.Common.csproj", "{DC455D0A-9403-4698-9970-C48472DE8AAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtracker.Auth.Repository", "Healthtracker.Auth.Repository\Healthtracker.Auth.Repository.csproj", "{1B288FF3-E14D-4A78-AD8C-A71BD65DBBF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Auth.Repository", "Healthtracker.Auth.Repository\Healthtrackr.Auth.Repository.csproj", "{1B288FF3-E14D-4A78-AD8C-A71BD65DBBF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Auth.Services", "Healthtrackr.Auth.Services\Healthtrackr.Auth.Services.csproj", "{B632020F-266D-4FB3-9C6A-1E1004B32C82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Auth.Services", "Healthtrackr.Auth.Services\Healthtrackr.Auth.Services.csproj", "{B632020F-266D-4FB3-9C6A-1E1004B32C82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Auth.Services.UnitTests", "Healthtrackr.Auth.Services.UnitTests\Healthtrackr.Auth.Services.UnitTests.csproj", "{03295606-8CDA-4E28-B1A8-9D3B2205E2D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Auth.Services.UnitTests", "Healthtrackr.Auth.Services.UnitTests\Healthtrackr.Auth.Services.UnitTests.csproj", "{03295606-8CDA-4E28-B1A8-9D3B2205E2D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Auth.Repository.UnitTests", "Healthtrackr.Auth.Repository.UnitTests\Healthtrackr.Auth.Repository.UnitTests.csproj", "{EC4B623A-5800-4486-AF1D-EDE3907BF3F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{03295606-8CDA-4E28-B1A8-9D3B2205E2D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03295606-8CDA-4E28-B1A8-9D3B2205E2D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03295606-8CDA-4E28-B1A8-9D3B2205E2D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC4B623A-5800-4486-AF1D-EDE3907BF3F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC4B623A-5800-4486-AF1D-EDE3907BF3F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC4B623A-5800-4486-AF1D-EDE3907BF3F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC4B623A-5800-4486-AF1D-EDE3907BF3F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
