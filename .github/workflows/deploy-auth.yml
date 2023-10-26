@@ -24,7 +24,7 @@ jobs:
     defaults:
       run:
         working-directory: './Healthtrackr.Auth/src/Healthtrackr.Auth/'
-      steps:
+    steps:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v4
         
