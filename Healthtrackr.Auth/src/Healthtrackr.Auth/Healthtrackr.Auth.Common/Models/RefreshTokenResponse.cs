@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Healthtrackr.Auth.Common.Models
 {
+    [ExcludeFromCodeCoverage]
     public class RefreshTokenResponse
     {
         [JsonProperty(PropertyName = "access_token")]
