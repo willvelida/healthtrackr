@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Auth.Services"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Auth.Services.UnitTests", "Healthtrackr.Auth.Services.UnitTests\Healthtrackr.Auth.Services.UnitTests.csproj", "{03295606-8CDA-4E28-B1A8-9D3B2205E2D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Auth.Repository.UnitTests", "Healthtrackr.Auth.Repository.UnitTests\Healthtrackr.Auth.Repository.UnitTests.csproj", "{EC4B623A-5800-4486-AF1D-EDE3907BF3F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Auth.Repository.UnitTests", "Healthtrackr.Auth.Repository.UnitTests\Healthtrackr.Auth.Repository.UnitTests.csproj", "{EC4B623A-5800-4486-AF1D-EDE3907BF3F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Auth.UnitTests", "Healthtrackr.Auth.UnitTests\Healthtrackr.Auth.UnitTests.csproj", "{4EABC8A0-C7F6-44B5-A847-5DCE75260E22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{EC4B623A-5800-4486-AF1D-EDE3907BF3F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC4B623A-5800-4486-AF1D-EDE3907BF3F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC4B623A-5800-4486-AF1D-EDE3907BF3F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EABC8A0-C7F6-44B5-A847-5DCE75260E22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EABC8A0-C7F6-44B5-A847-5DCE75260E22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EABC8A0-C7F6-44B5-A847-5DCE75260E22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EABC8A0-C7F6-44B5-A847-5DCE75260E22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
