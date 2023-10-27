@@ -43,7 +43,9 @@ jobs:
         run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --logger trx --results-directory ${{ env.COVERAGE_PATH }}
 
       - name: Copy Coverage to Predictable Location
-        run: cp ${{ env.COVERAGE_PATH }}/*/coverage.cobertura.xml ${{ env.COVERAGE_PATH }}/coverage.cobertura.xml
+        run: |
+          mkdir ${{ env.COVERAGE_PATH }}
+          cp ${{ env.COVERAGE_PATH }}/*/coverage.cobertura.xml ${{ env.COVERAGE_PATH }}/coverage.cobertura.xml
       
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
