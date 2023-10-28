@@ -53,6 +53,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
   properties: {
     supportsHttpsTrafficOnly: true
     accessTier: 'Hot'
+    minimumTlsVersion: 'TLS1_2'
   }
 }
 
@@ -98,6 +99,7 @@ resource functionApp 'Microsoft.Web/sites@2022-03-01' = {
           value: 'New Zealand Standard Time'
         }
       ]
+      minTlsVersion: '1.2'
     }
     httpsOnly: true
   }
