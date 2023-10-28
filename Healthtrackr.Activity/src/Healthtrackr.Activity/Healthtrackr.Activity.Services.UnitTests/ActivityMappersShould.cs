@@ -66,5 +66,23 @@ namespace Healthtrackr.Activity.Services.UnitTests
                 expectedSummaryRecord.ActivityCalories.Should().Be(testSummary.activityCalories);
             }
         }
+
+        [Fact]
+        public void ThrowExceptionWhenActivityIsNull()
+        {
+            Action mapperAction = () => _activityMappersSut.MapActivityToActivityRecord(null);
+
+            mapperAction.Should().Throw<Exception>();
+            _loggerMock.VerifyLog(logger => logger.LogError($"Exception thrown in MapActivityToActivityRecord: Object reference not set to an instance of an object."));
+        }
+
+        [Fact]
+        public void ThrowExceptionWhenSummaryIsNull()
+        {
+            Action mapperAction = () => _activityMappersSut.MapSummaryToActivitySummaryRecord(null);
+
+            mapperAction.Should().Throw<Exception>();
+            _loggerMock.VerifyLog(logger => logger.LogError($"Exception thrown in MapSummaryToActivitySummaryRecord: Object reference not set to an instance of an object."));
+        }
     }
 }

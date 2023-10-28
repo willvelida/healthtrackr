@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Activity.Servi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Healthtrackr.Activity.Services.UnitTests", "Healthtrackr.Activity.Services.UnitTests\Healthtrackr.Activity.Services.UnitTests.csproj", "{CA528FBC-A9DB-464C-95FD-292BFFE6F714}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthtrackr.Activity.Repository.UnitTests", "Healthtrackr.Activity.Repository.UnitTests\Healthtrackr.Activity.Repository.UnitTests.csproj", "{72F2B9C4-6809-48E2-8BB4-C3ADE0B7E3EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{CA528FBC-A9DB-464C-95FD-292BFFE6F714}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA528FBC-A9DB-464C-95FD-292BFFE6F714}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA528FBC-A9DB-464C-95FD-292BFFE6F714}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72F2B9C4-6809-48E2-8BB4-C3ADE0B7E3EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72F2B9C4-6809-48E2-8BB4-C3ADE0B7E3EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72F2B9C4-6809-48E2-8BB4-C3ADE0B7E3EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72F2B9C4-6809-48E2-8BB4-C3ADE0B7E3EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
