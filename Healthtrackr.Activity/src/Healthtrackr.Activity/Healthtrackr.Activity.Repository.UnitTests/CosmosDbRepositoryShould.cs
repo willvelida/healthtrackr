@@ -2,7 +2,6 @@ using AutoFixture;
 using FluentAssertions;
 using Healthtrackr.Activity.Common;
 using Healthtrackr.Activity.Common.Models;
-using Healthtrackr.Activity.Repository.Interfaces;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
