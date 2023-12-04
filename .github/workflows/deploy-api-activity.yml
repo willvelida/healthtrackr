@@ -28,7 +28,7 @@ jobs:
             uses: actions/checkout@main
 
           - name: 'Setup dotnet'
-            uses: actions/setup-dotnet@v3
+            uses: actions/setup-dotnet@v4
             with:
               dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -206,7 +206,7 @@ jobs:
               subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
           - name: 'Setup dotnet'
-            uses: actions/setup-dotnet@v3
+            uses: actions/setup-dotnet@v4
             with:
               dotnet-version: ${{ env.DOTNET_VERSION }}
               
