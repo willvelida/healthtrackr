@@ -125,7 +125,7 @@ jobs:
                   apiImage=$(az containerapp show --name healthtrackr-activity-api --resource-group ${{ secrets.AZURE_RG }} --query "properties.template.containers[0].image" -o tsv)  
                   echo "::set-output name=apiImage::$apiImage"
                   
-            - uses: azure/arm-deploy@v1
+            - uses: azure/arm-deploy@v2
               name: Run preflight validation
               with:
                 deploymentName: ${{ github.run_number }}
@@ -181,7 +181,7 @@ jobs:
                   echo "::set-output name=apiImage::$apiImage"
                     
             - name: Deploy Bicep File
-              uses: azure/arm-deploy@v1
+              uses: azure/arm-deploy@v2
               with:
                 resourceGroupName: ${{ secrets.AZURE_RG }}
                 template: ./Healthtrackr.Api.Activity/deploy/main.bicep
