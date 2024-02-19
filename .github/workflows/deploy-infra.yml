@@ -34,7 +34,7 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       
-      - uses: azure/arm-deploy@v1
+      - uses: azure/arm-deploy@v2
         name: Run preflight validation
         with:
           deploymentName: ${{ github.run_number }}
@@ -85,7 +85,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         
       - name: Deploy Bicep File
-        uses: azure/arm-deploy@v1
+        uses: azure/arm-deploy@v2
         with:
           resourceGroupName: ${{ secrets.AZURE_RG }}
           template: ./Healthtrackr.Infrastructure/main.bicep
